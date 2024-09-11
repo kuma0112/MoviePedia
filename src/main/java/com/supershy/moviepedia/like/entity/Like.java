@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
+@Table(name = "likes")
 public class Like {
 
     @EmbeddedId
@@ -19,11 +20,11 @@ public class Like {
 
     @ManyToOne
     @MapsId("memberId")
-    @JoinColumn(nullable = false)
+    @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
     @ManyToOne
     @MapsId("movieId")
-    @JoinColumn(nullable = false)
+    @JoinColumn(name = "movie_id", nullable = false)
     private Movie movie;
 }
