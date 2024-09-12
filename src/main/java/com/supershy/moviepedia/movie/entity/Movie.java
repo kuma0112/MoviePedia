@@ -17,7 +17,7 @@ public class Movie {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long movieId;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "genre_id")
     private Genre genre;
 
