@@ -19,6 +19,6 @@ public class LikeController {
     @PostMapping("/{movieId}/likes")
     public ResponseEntity<?> insertLike(@PathVariable("movieId") Long movieId) {
         Long memberId = 1L;
-        return ResponseEntity.status(HttpStatus.CREATED).body(likeService.insertLike(memberId, movieId));
+        return ResponseEntity.status(HttpStatus.OK).body(likeService.insertLike(memberId, movieId));
     }
 }
