@@ -27,7 +27,7 @@ public class Movie {
 
     private String director;
 
-    private BigDecimal reservationRate;
+    private Double reservationRate;
 
     private String imageUrl;
 
