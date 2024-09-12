@@ -32,7 +32,7 @@ public class Movie {
     private LocalDateTime releaseDate;
 
     @Enumerated(EnumType.STRING)  
-    @Column(columnDefinition = "ENUM('NOW_SHOWING', 'UPCOMING')")//jpa에는 string으로 mysql에선 enum으로
+    @Column(columnDefinition = "ENUM('NOW_SHOWING', 'UPCOMING')")//jpa에는 string으로 mysql에선 enum으로 인식함
     private ReleaseState releaseState;
 
     @Builder
