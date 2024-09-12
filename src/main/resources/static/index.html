@@ -28,10 +28,14 @@
             padding: 10px;
             border-radius: 5px;
         }
+        .movie-slider {
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+        }
         .movie-list {
             display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
+            transition: transform 0.5s ease;
         }
         .movie-item {
             background-color: #fff;
@@ -39,6 +43,7 @@
             border-radius: 5px;
             overflow: hidden;
             width: 200px;
+            margin-right: 20px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             text-align: center;
         }
@@ -54,14 +59,25 @@
             font-weight: bold;
             margin-bottom: 10px;
         }
-        .movie-item .reservation-rate {
+        .movie-item .reservation-rate, .movie-item .release-date {
             font-size: 14px;
             color: #666;
         }
-        .movie-item .release-date {
-            font-size: 14px;
-            color: #666;
-            margin-top: 10px;
+        .slider-button {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+        }
+        .slider-button.left {
+            left: 0;
+        }
+        .slider-button.right {
+            right: 0;
         }
     </style>
 </head>
@@ -71,15 +87,23 @@
 
         <div class="movie-section">
             <h2>현재 상영작</h2>
-            <div id="now-showing" class="movie-list">
-                <!-- 현재 상영작 -->
+            <div class="movie-slider">
+                <button class="slider-button left" onclick="slideLeft('now-showing')">◀</button>
+                <div id="now-showing" class="movie-list">
+                    <!-- 현재 상영작 -->
+                </div>
+                <button class="slider-button right" onclick="slideRight('now-showing')">▶</button>
             </div>
         </div>
 
         <div class="movie-section">
             <h2>개봉 예정작</h2>
-            <div id="upcoming" class="movie-list">
-                <!-- 개봉 예정작 -->
+            <div class="movie-slider">
+                <button class="slider-button left" onclick="slideLeft('upcoming')">◀</button>
+                <div id="upcoming" class="movie-list">
+                    <!-- 개봉 예정작 -->
+                </div>
+                <button class="slider-button right" onclick="slideRight('upcoming')">▶</button>
             </div>
         </div>
     </div>
@@ -87,7 +111,7 @@
     <script>
         async function fetchMovies() {
             try {
-                const response = await fetch('/api/movies/rankings?page=0&size=5');
+                const response = await fetch('/api/movies/rankings?page=0&size=20');
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
@@ -129,6 +153,17 @@
             } catch (error) {
                 console.error('Error fetching movies:', error);
             }
+        }
+
+        // 슬라이드 좌우로 이동하는 함수
+        function slideLeft(listId) {
+            const movieList = document.getElementById(listId);
+            movieList.scrollBy({ left: -220, behavior: 'smooth' }); // 왼쪽으로 슬라이드
+        }
+
+        function slideRight(listId) {
+            const movieList = document.getElementById(listId);
+            movieList.scrollBy({ left: 220, behavior: 'smooth' }); // 오른쪽으로 슬라이드
         }
 
         fetchMovies();
