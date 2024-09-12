@@ -31,7 +31,7 @@ public class Movie {
     private String imageUrl;
     private LocalDateTime releaseDate;
 
-    @Enumerated(EnumType.STRING)  // jpa에는 String으로 sql엔 enum타입으로
+    @Enumerated(EnumType.STRING)  
     @Column(columnDefinition = "ENUM('NOW_SHOWING', 'UPCOMING')")
     private ReleaseState releaseState;
 
