@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Rankings</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        .movie-section {
+            margin-bottom: 40px;
+        }
+        .movie-section h2 {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .movie-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .movie-item {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            overflow: hidden;
+            width: 200px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .movie-item img {
+            width: 100%;
+            height: auto;
+        }
+        .movie-item .details {
+            padding: 10px;
+        }
+        .movie-item .title {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .movie-item .reservation-rate {
+            font-size: 14px;
+            color: #666;
+        }
+        .movie-item .release-date {
+            font-size: 14px;
+            color: #666;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Movie Rankings</h1>
+
+        <div class="movie-section">
+            <h2>현재 상영작</h2>
+            <div id="now-showing" class="movie-list">
+                <!-- 현재 상영작 -->
+            </div>
+        </div>
+
+        <div class="movie-section">
+            <h2>개봉 예정작</h2>
+            <div id="upcoming" class="movie-list">
+                <!-- 개봉 예정작 -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function fetchMovies() {
+            try {
+                const response = await fetch('/api/movies/rankings?page=0&size=5');
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const data = await response.json();
+                
+                const nowShowingList = document.getElementById('now-showing');
+                const upcomingList = document.getElementById('upcoming');
+                
+                nowShowingList.innerHTML = '';
+                upcomingList.innerHTML = '';
+
+                data.content.forEach(movie => {
+                    const movieItem = movie.releaseState === 'NOW_SHOWING'
+                        ? `
+                            <div class="movie-item">
+                                <img src="${movie.imageUrl}" alt="${movie.title}">
+                                <div class="details">
+                                    <div class="title">${movie.title}</div>
+                                    <div class="reservation-rate">예매율: ${movie.reservationRate}%</div>
+                                </div>
+                            </div>
+                        `
+                        : `
+                            <div class="movie-item">
+                                <img src="${movie.imageUrl}" alt="${movie.title}">
+                                <div class="details">
+                                    <div class="title">${movie.title}</div>
+                                    <div class="release-date">개봉일: ${movie.releaseDate}</div>
+                                </div>
+                            </div>
+                        `;
+
+                    if (movie.releaseState === 'NOW_SHOWING') {
+                        nowShowingList.innerHTML += movieItem;
+                    } else if (movie.releaseState === 'UPCOMING') {
+                        upcomingList.innerHTML += movieItem;
+                    }
+                });
+            } catch (error) {
+                console.error('Error fetching movies:', error);
+            }
+        }
+
+        fetchMovies();
+    </script>
+</body>
+</html>
