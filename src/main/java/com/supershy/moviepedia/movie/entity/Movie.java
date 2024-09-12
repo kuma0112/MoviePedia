@@ -33,7 +33,7 @@ public class Movie {
 
     @Enumerated(EnumType.STRING)  
     @Column(columnDefinition = "ENUM('NOW_SHOWING', 'UPCOMING')")//jpa에는 string으로 mysql에선 enum으로 인식함
-    private ReleaseState releaseState;
+    private ReleaseState releaseState;//ㅇ
 
     @Builder
     public Movie(Genre genre, String title, String description, String director, Double reservationRate, String imageUrl, LocalDateTime releaseDate, ReleaseState releaseState) {
