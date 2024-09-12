@@ -27,4 +27,10 @@ public class Like {
     @MapsId("movieId")
     @JoinColumn(name = "movie_id", nullable = false)
     private Movie movie;
+
+    public Like(Member member, Movie movie) {
+        this.likeId = new LikeId(member.getMemberId(), movie.getMovieId());
+        this.member = member;
+        this.movie = movie;
+    }
 }
