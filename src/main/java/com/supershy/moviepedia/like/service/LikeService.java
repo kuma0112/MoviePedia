@@ -1,4 +1,6 @@
 package com.supershy.moviepedia.like.service;
 
-public class LikeService {
+public interface LikeService {
+
+    String insertLike(Long memberId, Long movieId);
 }
