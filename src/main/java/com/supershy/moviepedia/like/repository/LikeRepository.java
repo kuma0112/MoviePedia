@@ -17,3 +17,4 @@ public interface LikeRepository extends JpaRepository<Like, LikeId> {
             countQuery = "select count(m) from Movie m join Like l on l.movie.movieId = m.movieId where l.member.memberId = :memberId")
     Page<Movie> findAllByMember_MemberId(Long memberId, Pageable pageable);
 }
+

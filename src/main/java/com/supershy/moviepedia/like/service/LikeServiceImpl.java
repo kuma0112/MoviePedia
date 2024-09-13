@@ -62,3 +62,4 @@ public class LikeServiceImpl implements LikeService {
         return new LikedMovieListDto(likedMovieDtoList,(int) foundMovieList.getTotalElements());
     }
 }
+
