@@ -22,7 +22,7 @@ public class MovieController {
 
   
     @GetMapping("/rankings")
-    public ResponseEntity<Page<MovieDto>> getRanking(Pageable pageable) {
+    public ResponseEntity<?> getRanking(Pageable pageable) {
         Page<MovieDto> movieRanking = movieService.getRanking(pageable);
         return ResponseEntity.status(HttpStatus.OK).body(movieRanking);
     }
