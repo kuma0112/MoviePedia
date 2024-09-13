@@ -1,10 +1,7 @@
 package com.supershy.moviepedia.movie.service;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-
-import com.supershy.moviepedia.movie.dto.MovieDto;
+import com.supershy.moviepedia.movie.dto.MovieListDto;
 
 public interface MovieService {
-    Page<MovieDto> getRanking(Pageable pageable);
+    MovieListDto getRanking(int page, int size);
 }
