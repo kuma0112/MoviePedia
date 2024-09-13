@@ -27,3 +27,4 @@ public class LikeController {
         return ResponseEntity.status(HttpStatus.OK).body(likeService.getLikedMovies(page, size, memberId));
     }
 }
+
