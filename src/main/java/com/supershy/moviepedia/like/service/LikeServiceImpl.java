@@ -1,5 +1,7 @@
 package com.supershy.moviepedia.like.service;
 
+import com.supershy.moviepedia.like.dto.LikedMovieDto;
+import com.supershy.moviepedia.like.dto.LikedMovieListDto;
 import com.supershy.moviepedia.like.entity.Like;
 import com.supershy.moviepedia.like.repository.LikeRepository;
 import com.supershy.moviepedia.member.entity.Member;
@@ -9,7 +11,14 @@ import com.supershy.moviepedia.movie.repository.MovieRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -40,4 +49,17 @@ public class LikeServiceImpl implements LikeService {
     public void deleteLike(Long memberId, Long movieId) {
         likeRepository.deleteByMember_MemberIdAndMovie_MovieId(memberId, movieId);
     }
+
+    @Override
+    public LikedMovieListDto getLikedMovies(int page, int size, Long memberId) {
+        Sort sortObj = Sort.by(Sort.Direction.ASC, "title");
+        Pageable pageable = PageRequest.of(page, size, sortObj);
+        Page<Movie> foundMovieList = likeRepository.findAllByMember_MemberId(memberId, pageable);
+
+        List<LikedMovieDto> likedMovieDtoList = foundMovieList.stream()
+                .map(LikedMovieDto::new)
+                .collect(Collectors.toList());
+        return new LikedMovieListDto(likedMovieDtoList,(int) foundMovieList.getTotalElements());
+    }
 }
+

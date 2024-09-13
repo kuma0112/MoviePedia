@@ -4,10 +4,7 @@ import com.supershy.moviepedia.like.service.LikeService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/movies")
@@ -21,4 +18,13 @@ public class LikeController {
         Long memberId = 1L;
         return ResponseEntity.status(HttpStatus.OK).body(likeService.insertLike(memberId, movieId));
     }
+
+    @GetMapping("/likes")
+    public ResponseEntity<?> getLikedMovies(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        Long memberId = 1L;
+        return ResponseEntity.status(HttpStatus.OK).body(likeService.getLikedMovies(page, size, memberId));
+    }
 }
+
