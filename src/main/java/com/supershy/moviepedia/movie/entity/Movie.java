@@ -16,7 +16,7 @@ public class Movie {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long movieId;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "genre_id")
     private Genre genre;
 
@@ -29,7 +29,7 @@ public class Movie {
 
     @Enumerated(EnumType.STRING)  
     @Column(columnDefinition = "ENUM('NOW_SHOWING', 'UPCOMING')")//jpa에는 string으로 mysql에선 enum으로 인식함
-    private ReleaseState releaseState;//ㅇ
+    private ReleaseState releaseState;
 
     @Builder
     public Movie(Genre genre, String title, String description, String director, Double reservationRate, String imageUrl, LocalDateTime releaseDate, ReleaseState releaseState) {
