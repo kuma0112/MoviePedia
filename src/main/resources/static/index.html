@@ -28,56 +28,71 @@
             padding: 10px;
             border-radius: 5px;
         }
-        .movie-slider {
+        .carousel-container {
             position: relative;
-            overflow: hidden;
             width: 100%;
+            overflow: hidden;
         }
-        .movie-list {
+        .carousel {
             display: flex;
             transition: transform 0.5s ease;
         }
-        .movie-item {
+        .carousel-inner {
+            display: flex;
+            width: 100%;
+        }
+        .carousel-item {
+            min-width: 20%; /* 5개씩 보이도록 조정 */
+            box-sizing: border-box;
+            padding: 0 10px;
             background-color: #fff;
             border: 1px solid #ddd;
             border-radius: 5px;
             overflow: hidden;
-            width: 200px;
-            margin-right: 20px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             text-align: center;
         }
-        .movie-item img {
+        .carousel-item img {
             width: 100%;
             height: auto;
         }
-        .movie-item .details {
+        .carousel-item .details {
             padding: 10px;
         }
-        .movie-item .title {
+        .carousel-item .title {
             font-size: 16px;
             font-weight: bold;
             margin-bottom: 10px;
         }
-        .movie-item .reservation-rate, .movie-item .release-date {
+        .carousel-item .reservation-rate,
+        .carousel-item .release-date {
             font-size: 14px;
             color: #666;
         }
-        .slider-button {
+        .carousel-button {
             position: absolute;
             top: 50%;
             transform: translateY(-50%);
-            background-color: rgba(0, 0, 0, 0.5);
-            color: white;
+            background-color: #333;
+            color: #fff;
             border: none;
-            padding: 10px;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
             cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1;
         }
-        .slider-button.left {
-            left: 0;
+        .carousel-button.left {
+            left: 10px;
         }
-        .slider-button.right {
-            right: 0;
+        .carousel-button.right {
+            right: 10px;
+        }
+        .carousel-button.hidden {
+            display: none;
         }
     </style>
 </head>
@@ -87,28 +102,36 @@
 
         <div class="movie-section">
             <h2>현재 상영작</h2>
-            <div class="movie-slider">
-                <button class="slider-button left" onclick="slideLeft('now-showing')">◀</button>
-                <div id="now-showing" class="movie-list">
-                    <!-- 현재 상영작 -->
+            <div class="carousel-container">
+                <button class="carousel-button left" id="now-showing-left" onclick="moveSlide(-1, 'now-showing')">&#10094;</button>
+                <div id="now-showing-carousel" class="carousel">
+                    <div class="carousel-inner" id="now-showing">
+                        <!-- 현재 상영작 -->
+                    </div>
                 </div>
-                <button class="slider-button right" onclick="slideRight('now-showing')">▶</button>
+                <button class="carousel-button right" id="now-showing-right" onclick="moveSlide(1, 'now-showing')">&#10095;</button>
             </div>
         </div>
 
         <div class="movie-section">
             <h2>개봉 예정작</h2>
-            <div class="movie-slider">
-                <button class="slider-button left" onclick="slideLeft('upcoming')">◀</button>
-                <div id="upcoming" class="movie-list">
-                    <!-- 개봉 예정작 -->
+            <div class="carousel-container">
+                <button class="carousel-button left" id="upcoming-left" onclick="moveSlide(-1, 'upcoming')">&#10094;</button>
+                <div id="upcoming-carousel" class="carousel">
+                    <div class="carousel-inner" id="upcoming">
+                        <!-- 개봉 예정작 -->
+                    </div>
                 </div>
-                <button class="slider-button right" onclick="slideRight('upcoming')">▶</button>
+                <button class="carousel-button right" id="upcoming-right" onclick="moveSlide(1, 'upcoming')">&#10095;</button>
             </div>
         </div>
     </div>
 
     <script>
+        let nowShowingSlideIndex = 0;
+        let upcomingSlideIndex = 0;
+        const slidesToShow = 5;
+
         async function fetchMovies() {
             try {
                 const response = await fetch('/api/movies/rankings?page=0&size=20');
@@ -123,10 +146,13 @@
                 nowShowingList.innerHTML = '';
                 upcomingList.innerHTML = '';
 
+                let nowShowingMovies = [];
+                let upcomingMovies = [];
+
                 data.content.forEach(movie => {
                     const movieItem = movie.releaseState === 'NOW_SHOWING'
                         ? `
-                            <div class="movie-item">
+                            <div class="carousel-item">
                                 <img src="${movie.imageUrl}" alt="${movie.title}">
                                 <div class="details">
                                     <div class="title">${movie.title}</div>
@@ -135,7 +161,7 @@
                             </div>
                         `
                         : `
-                            <div class="movie-item">
+                            <div class="carousel-item">
                                 <img src="${movie.imageUrl}" alt="${movie.title}">
                                 <div class="details">
                                     <div class="title">${movie.title}</div>
@@ -145,25 +171,86 @@
                         `;
 
                     if (movie.releaseState === 'NOW_SHOWING') {
-                        nowShowingList.innerHTML += movieItem;
+                        nowShowingMovies.push(movieItem);
                     } else if (movie.releaseState === 'UPCOMING') {
-                        upcomingList.innerHTML += movieItem;
+                        upcomingMovies.push(movieItem);
                     }
                 });
+
+                // 전체 아이템을 모두 추가
+                nowShowingList.innerHTML = nowShowingMovies.join('');
+                upcomingList.innerHTML = upcomingMovies.join('');
+
+                // 슬라이드에 표시할 수 있는 총 개수
+                document.getElementById('now-showing-carousel').setAttribute('data-total-slides', nowShowingMovies.length);
+                document.getElementById('upcoming-carousel').setAttribute('data-total-slides', upcomingMovies.length);
+
+                // 초기 버튼 상태 설정
+                updateButtonVisibility('now-showing');
+                updateButtonVisibility('upcoming');
+
             } catch (error) {
                 console.error('Error fetching movies:', error);
             }
         }
 
-        // 슬라이드 좌우로 이동하는 함수
-        function slideLeft(listId) {
-            const movieList = document.getElementById(listId);
-            movieList.scrollBy({ left: -220, behavior: 'smooth' }); // 왼쪽으로 슬라이드
+        function moveSlide(step, category) {
+            const carousel = document.getElementById(`${category}`);
+            const totalSlides = parseInt(document.getElementById(`${category}-carousel`).getAttribute('data-total-slides'), 10);
+            const itemsToShow = slidesToShow;
+
+            let slideIndex;
+            if (category === 'now-showing') {
+                slideIndex = nowShowingSlideIndex;
+            } else {
+                slideIndex = upcomingSlideIndex;
+            }
+
+            if (step < 0 && slideIndex > 0) {
+                slideIndex += step;
+            } else if (step > 0 && slideIndex < totalSlides - itemsToShow) {
+                slideIndex += step;
+            }
+            
+            const offset = -slideIndex * 100 / itemsToShow;
+            carousel.style.transform = `translateX(${offset}%)`;
+
+            if (category === 'now-showing') {
+                nowShowingSlideIndex = slideIndex;
+            } else {
+                upcomingSlideIndex = slideIndex;
+            }
+
+            // 버튼 상태 업데이트
+            updateButtonVisibility(category);
         }
 
-        function slideRight(listId) {
-            const movieList = document.getElementById(listId);
-            movieList.scrollBy({ left: 220, behavior: 'smooth' }); // 오른쪽으로 슬라이드
+        function updateButtonVisibility(category) {
+            const carousel = document.getElementById(`${category}`);
+            const totalSlides = parseInt(document.getElementById(`${category}-carousel`).getAttribute('data-total-slides'), 10);
+            const itemsToShow = slidesToShow;
+
+            let slideIndex;
+            if (category === 'now-showing') {
+                slideIndex = nowShowingSlideIndex;
+            } else {
+                slideIndex = upcomingSlideIndex;
+            }
+
+            const leftButton = document.getElementById(`${category}-left`);
+            const rightButton = document.getElementById(`${category}-right`);
+
+            if (slideIndex === 0) {
+                leftButton.classList.add('hidden');
+            } else {
+                leftButton.classList.remove('hidden');
+            }
+
+            if (slideIndex >= totalSlides - itemsToShow) {
+                rightButton.classList.add('hidden');
+            } else {
+                rightButton.classList.remove('hidden');
+            }
         }
 
         fetchMovies();
