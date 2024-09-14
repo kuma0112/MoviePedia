@@ -1,6 +1,5 @@
 package com.supershy.moviepedia.movie.dto;
 
-import com.supershy.moviepedia.genre.entity.Genre;
 import com.supershy.moviepedia.movie.entity.Movie;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
