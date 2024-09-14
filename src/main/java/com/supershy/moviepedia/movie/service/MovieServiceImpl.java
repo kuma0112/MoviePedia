@@ -5,8 +5,6 @@ import com.supershy.moviepedia.movie.dto.ReviewList;
 import com.supershy.moviepedia.movie.dto.MovieListDto;
 import com.supershy.moviepedia.movie.entity.Movie;
 import com.supershy.moviepedia.movie.repository.MovieRepository;
-import com.supershy.moviepedia.review.entity.Review;
-import com.supershy.moviepedia.review.repository.ReviewRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -23,20 +21,15 @@ import java.util.stream.Collectors;
 public class MovieServiceImpl implements MovieService {
 
     private final MovieRepository movieRepository;
-    private final ReviewRepository reviewRepository;
 
     @Override
     public MovieListDto getRanking(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<Movie> moviePage = movieRepository.findAll(pageable);
+        Page<Movie> moviePage = movieRepository.findAllWithReviewsAndGenre(pageable);
 
         List<MovieDto> movieDtoList = moviePage.stream()
             .map(movie -> {
-                // 영화에 맞는 리뷰 리스트를 가져옴
-                List<Review> reviews = reviewRepository.findByMovie(movie);
-
-                // 리뷰에서 content와 nickname을 추출하여 ReviewList로 변환
-                List<ReviewList> reviewList = reviews.stream()
+                List<ReviewList> reviewList = movie.getReviews().stream()
                     .map(review -> ReviewList.builder()
                         .content(review.getContent())
                         .nickname(review.getMember().getNickname())
