@@ -6,8 +6,12 @@ import com.supershy.moviepedia.movie.dto.MovieListDto;
 import com.supershy.moviepedia.movie.entity.Movie;
 import com.supershy.moviepedia.movie.repository.MovieRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,9 +24,10 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public MovieListDto getRanking(int page, int size) {
-        List<Movie> movies = movieRepository.findAllWithReviews();
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Movie> moviePage = movieRepository.findAllWithReviewsAndGenre(pageable);
 
-        List<MovieDto> movieDtoList = movies.stream()
+        List<MovieDto> movieDtoList = moviePage.stream()
             .map(movie -> {
                 List<ReviewList> reviewList = movie.getReviews().stream()
                     .map(review -> ReviewList.builder()
@@ -35,6 +40,6 @@ public class MovieServiceImpl implements MovieService {
             })
             .collect(Collectors.toList());
 
-        return new MovieListDto(movieDtoList, movieDtoList.size());
+        return new MovieListDto(movieDtoList, (int) moviePage.getTotalElements());
     }
 }
