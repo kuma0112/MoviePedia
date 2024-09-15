@@ -1,6 +1,6 @@
 package com.supershy.moviepedia.auth.config;
 
-import com.supershy.moviepedia.auth.filter.JwtAuthenticationFileter;
+import com.supershy.moviepedia.auth.filter.JwtAuthenticationFilter;
 import com.supershy.moviepedia.auth.utils.JwtTokenProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -33,7 +33,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/members").permitAll() // 회원가입 엔드포인트
                         .requestMatchers("/api/members/login").permitAll() // 로그인 엔드포인트
                         .anyRequest().authenticated()) // 그 외 모든 요청은 인증 필요
-                .addFilterBefore(new JwtAuthenticationFileter(jwtTokenProvider),
+                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),
                         UsernamePasswordAuthenticationFilter.class)
                 .formLogin(formLogin -> formLogin.disable())
                 .logout(logout -> logout.disable());
