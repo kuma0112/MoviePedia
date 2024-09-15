@@ -9,4 +9,9 @@ public class PageController {
     public String index() {
         return "index";
     }
+
+    @GetMapping("/pages/register")
+    public String register() {
+        return "register";
+    }
 }

@@ -20,7 +20,7 @@
         <button>검색</button>
     </div>
     <div class="user-options">
-        <a href="signup.html">회원가입</a>
+        <a href="/pages/register">회원가입</a>
         <a href="login.html">로그인</a>
     </div>
 </nav>
