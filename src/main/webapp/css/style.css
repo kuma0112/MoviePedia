@@ -304,3 +304,87 @@ button[type="submit"]:hover {
     text-decoration: underline;
 }
 
+/* 영화 상세 정보 섹션 */
+.movie-detail {
+    max-width: 900px; /* 페이지 폭 */
+    margin: 50px auto; /* 상하 여백 */
+    padding: 20px;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+/* 영화 헤더 (타이틀, 포스터, 예약율과 줄거리) */
+.movie-header {
+    display: flex;
+    justify-content: space-between; /* 요소 간격 설정 */
+    align-items: flex-start;
+    flex-wrap: wrap; /* 작은 화면에서는 세로로 정렬 */
+}
+
+.movie-info {
+    flex: 1;
+    margin-right: 20px; /* 포스터와 간격 */
+}
+
+.movie-title h1 {
+    font-size: 30px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.movie-title p {
+    margin: 5px 0;
+    font-size: 16px; /* 텍스트 크기 조정 */
+    color: #555;
+}
+
+.movie-poster img {
+    width: 250px; /* 포스터 크기 */
+    border-radius: 8px;
+}
+
+/* 예약율 섹션 */
+.movie-reservation {
+    margin-top: 20px;
+}
+
+.movie-reservation h2 {
+    font-size: 18px; /* 제목 크기 */
+    font-weight: bold;
+}
+
+.reservation-rate-bar {
+    width: 100%;
+    background-color: #e0e0e0;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-top: 5px;
+}
+
+.reservation-rate-fill {
+    height: 20px; /* 높이 */
+    background-color: #FF0050;
+    text-align: right;
+    padding-right: 5px;
+    color: white;
+    line-height: 20px;
+    font-weight: bold;
+}
+
+/* 줄거리 섹션 */
+.movie-description {
+    margin-top: 25px;
+}
+
+.movie-description h2 {
+    font-size: 18px; /* 제목 크기 */
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+.movie-description p {
+    font-size: 14px; /* 텍스트 크기 */
+    line-height: 1.6;
+    color: #333;
+}

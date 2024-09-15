@@ -89,12 +89,14 @@
         movieListContainer.innerHTML = '';  // 먼저 기존 내용을 지우고
         const fragment = document.createDocumentFragment();  // Fragment 사용
         movieList.forEach((movie, index) => {
-            console.log("foreach 후" + JSON.stringify(movie.title) + index)
+            console.log("Movie ID: ", movie.movieId);
             const movieCard = document.createElement('div');
             movieCard.classList.add('movie-card');
 
             movieCard.innerHTML = `
-            <img src="\${movie.imageUrl}" alt="\${movie.title} 포스터">
+            <a href="/pages/movies/\${movie.movieId}">
+                <img src="\${movie.imageUrl}" alt="\${movie.title} 포스터">
+            </a>
             <div class="rank">\${index + 1}</div>
             <div class="title">\${movie.title}</div>
             <div class="reservationRate">예매율: \${movie.reservationRate}%</div>
