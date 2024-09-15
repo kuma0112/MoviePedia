@@ -21,7 +21,7 @@
     </div>
     <div class="user-options">
         <a href="/pages/register">회원가입</a>
-        <a href="login.html">로그인</a>
+        <a href="/pages/login">로그인</a>
     </div>
 </nav>
 
