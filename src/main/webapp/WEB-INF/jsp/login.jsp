@@ -22,3 +22,26 @@
         <a href="/pages/login">로그인</a>
     </div>
 </div>
+
+
+<!-- 로그인 폼 섹션 -->
+<div class="login-form-container">
+    <h2>로그인</h2>
+    <form id="login-form" method="POST" action="${pageContext.request.contextPath}/login">
+        <div class="form-group">
+            <label for="email">이메일:</label>
+            <input type="email" id="email" name="email" required>
+        </div>
+        <div class="form-group">
+            <label for="password">비밀번호:</label>
+            <input type="password" id="password" name="password" required>
+        </div>
+        <button type="submit">로그인</button>
+    </form>
+    <div class="login-footer">
+        계정이 없으신가요? <a href="/pages/signup">회원가입</a>
+    </div>
+</div>
+
+</body>
+</html>
