@@ -1,0 +1,396 @@
+body {
+    margin: 0;
+    font-family: 'Roboto', sans-serif;
+}
+
+/* 네비게이션 바 스타일 */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: white;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.navbar .logo {
+    font-size: 28px;
+    font-weight: bold;
+    color: #FF0050;
+}
+
+/* 로고 이미지 스타일 */
+.logo img {
+    width: 150px;  /* 로고의 너비를 100px로 설정 */
+    height: auto;  /* 높이는 자동으로 조정하여 비율을 유지 */
+}
+
+.navbar .search-bar {
+    display: flex;
+    align-items: center;
+    flex-grow: 1;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.search-bar input[type="text"] {
+    padding: 10px;
+    width: 200px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.search-bar button {
+    background-color: #FF0050;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+.navbar .user-options {
+    display: flex;
+}
+
+.navbar .user-options a {
+    text-decoration: none;
+    color: black;
+    font-size: 16px;
+    padding: 8px 16px;
+    border-radius: 4px;
+    background-color: white;
+    border: 1px solid white;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.navbar .user-options a:hover {
+    background-color: #f0f0f0;
+    color: black;
+}
+
+/* 박스오피스 순위 스타일 */
+.box-office {
+    padding: 50px;
+    text-align: left;
+}
+
+.box-office h2 {
+    margin-bottom: 20px;
+    font-size: 23px; /* 글자 크기 줄임 */
+    font-weight: bold;
+    margin-left: 20px;
+}
+
+.box-office-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 5px;
+    justify-items: center;
+}
+
+.movie-card {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    width: 250px; /* 카드 크기 */
+    text-align: center;
+}
+
+.movie-card img {
+    width: 100%;
+    border-radius: 8px;
+}
+
+.movie-card .rank {
+    font-size: 20px;
+    font-weight: bold;
+    color: #FF0050;
+    margin-top: 10px;
+}
+
+.movie-card .title {
+    font-size: 16px;
+    margin: 10px 0;
+}
+
+/* 개봉 예정작 스타일 */
+.upcoming-section {
+    padding: 50px;
+    text-align: left;
+}
+
+.upcoming-section h2 {
+    margin-bottom: 20px;
+    font-size: 23px; /* 글자 크기 줄임 */
+    font-weight: bold;
+    margin-left: 20px;
+}
+
+.upcoming-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 5px;
+    justify-items: center;
+}
+
+.upcoming-card {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    width: 250px;
+    text-align: center;
+}
+
+.upcoming-card img {
+    width: 100%;
+    border-radius: 8px;
+}
+
+.upcoming-card .release-date {
+    font-size: 14px;
+    color: #FF0050;
+    margin-top: 10px;
+}
+
+.upcoming-card .title {
+    font-size: 16px;
+    margin: 10px 0;
+}
+
+/* 회원가입 스타일 */
+.signup-form-container {
+    max-width: 400px;
+    margin: 100px auto;
+    padding: 40px;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    text-align: center;
+}
+
+.signup-form-container h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    font-weight: bold;
+    color: #FF0050;
+}
+
+.form-group {
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+.form-group label {
+    display: block;
+    font-size: 14px;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.form-group input:focus {
+    border-color: #FF0050;
+    outline: none;
+}
+
+button[type="submit"] {
+    width: 100%;
+    background-color: #FF0050;
+    color: white;
+    border: none;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+button[type="submit"]:hover {
+    background-color: #e60046;
+}
+
+.signup-footer {
+    margin-top: 20px;
+    font-size: 14px;
+}
+
+.signup-footer a {
+    color: #FF0050;
+    text-decoration: none;
+}
+
+.signup-footer a:hover {
+    text-decoration: underline;
+}
+
+/* 로그인 폼 스타일 */
+.login-form-container {
+    max-width: 400px;
+    margin: 100px auto;
+    padding: 40px;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    text-align: center;
+}
+
+.login-form-container h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    font-weight: bold;
+    color: #FF0050;
+}
+
+.form-group {
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+.form-group label {
+    display: block;
+    font-size: 14px;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.form-group input:focus {
+    border-color: #FF0050;
+    outline: none;
+}
+
+button[type="submit"] {
+    width: 100%;
+    background-color: #FF0050;
+    color: white;
+    border: none;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+button[type="submit"]:hover {
+    background-color: #e60046;
+}
+
+/* 로그인 하단 텍스트 */
+.login-footer {
+    margin-top: 20px;
+    font-size: 14px;
+}
+
+.login-footer a {
+    color: #FF0050;
+    text-decoration: none;
+}
+
+.login-footer a:hover {
+    text-decoration: underline;
+}
+
+/* 영화 상세 정보 섹션 */
+.movie-detail {
+    max-width: 900px; /* 페이지 폭 */
+    margin: 50px auto; /* 상하 여백 */
+    padding: 20px;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+/* 영화 헤더 (타이틀, 포스터, 예약율과 줄거리) */
+.movie-header {
+    display: flex;
+    justify-content: space-between; /* 요소 간격 설정 */
+    align-items: flex-start;
+    flex-wrap: wrap; /* 작은 화면에서는 세로로 정렬 */
+}
+
+.movie-info {
+    flex: 1;
+    margin-right: 20px; /* 포스터와 간격 */
+}
+
+.movie-title h1 {
+    font-size: 30px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.movie-title p {
+    margin: 5px 0;
+    font-size: 16px; /* 텍스트 크기 조정 */
+    color: #555;
+}
+
+.movie-poster img {
+    width: 250px; /* 포스터 크기 */
+    border-radius: 8px;
+}
+
+/* 예약율 섹션 */
+.movie-reservation {
+    margin-top: 20px;
+}
+
+.movie-reservation h2 {
+    font-size: 18px; /* 제목 크기 */
+    font-weight: bold;
+}
+
+.reservation-rate-bar {
+    width: 100%;
+    background-color: #e0e0e0;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-top: 5px;
+}
+
+.reservation-rate-fill {
+    height: 20px; /* 높이 */
+    background-color: #FF0050;
+    text-align: right;
+    padding-right: 5px;
+    color: white;
+    line-height: 20px;
+    font-weight: bold;
+}
+
+/* 줄거리 섹션 */
+.movie-description {
+    margin-top: 25px;
+}
+
+.movie-description h2 {
+    font-size: 18px; /* 제목 크기 */
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+.movie-description p {
+    font-size: 14px; /* 텍스트 크기 */
+    line-height: 1.6;
+    color: #333;
+}

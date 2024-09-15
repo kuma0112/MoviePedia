@@ -5,6 +5,8 @@ import com.supershy.moviepedia.movie.dto.ReviewList;
 import com.supershy.moviepedia.movie.dto.MovieListDto;
 import com.supershy.moviepedia.movie.entity.Movie;
 import com.supershy.moviepedia.movie.repository.MovieRepository;
+import com.supershy.moviepedia.review.entity.Review;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -41,5 +43,17 @@ public class MovieServiceImpl implements MovieService {
             .collect(Collectors.toList());
 
         return new MovieListDto(movieDtoList, (int) moviePage.getTotalElements());
+    }
+
+    @Override
+    public MovieDto findMovieById(Long movieId) {
+        Movie movie = movieRepository.findById(movieId).orElseThrow(() -> new EntityNotFoundException("찾으시는 영화가 없습니다."));
+        List<ReviewList> reviewList = movie.getReviews().stream()
+                .map(review -> ReviewList.builder()
+                        .content(review.getContent())
+                        .nickname(review.getMember().getNickname())
+                        .build())
+                .collect(Collectors.toList());
+        return MovieDto.fromEntity(movie, reviewList);
     }
 }
