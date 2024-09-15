@@ -38,7 +38,7 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-    public boolean validateToken(String token) {
+    public boolean validateToken(String token) { // -> JWT 유효성 검사
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
             return true;
@@ -46,5 +46,22 @@ public class JwtTokenProvider {
             // 로그 처리
             return false;
         }
+    }
+
+    public String getEmailFromToken(String token) { // -> 사용자 이메일 추출
+        return Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+                .getBody()
+                .getSubject();
+    }
+
+    public String resolveToken(HttpServletRequest request) { // -> jwt 토큰 추출
+        String bearerToken = request.getHeader("Authorization");
+        if (bearerToken != null && bearerToken.startsWith("Bearer ")) { // -> Header 값이 Bearer로 시작하는지 확인
+            return bearerToken.substring(7);
+        }
+        return null;
     }
 }
