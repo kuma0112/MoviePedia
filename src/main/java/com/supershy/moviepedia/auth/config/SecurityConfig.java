@@ -30,8 +30,8 @@ public class SecurityConfig {
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS // JWT TOken 인증방식으로 세션을 필요 없으므로 비활성화
                 ))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/members").permitAll() // 회원가입 엔드포인트
-                        .requestMatchers("/api/members/login").permitAll() // 로그인 엔드포인트
+                        .requestMatchers("/api/members/").permitAll() // 회원가입 엔드포인트
+                        .requestMatchers("/api/members/login/").permitAll() // 로그인 엔드포인트
                         .anyRequest().authenticated()) // 그 외 모든 요청은 인증 필요
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),
                         UsernamePasswordAuthenticationFilter.class)
