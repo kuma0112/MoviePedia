@@ -39,9 +39,57 @@
         <button type="submit">로그인</button>
     </form>
     <div class="login-footer">
-        계정이 없으신가요? <a href="/pages/signup">회원가입</a>
+        계정이 없으신가요? <a href="/pages/register">회원가입</a>
     </div>
 </div>
+
+<script>
+    document.getElementById('login-form').addEventListener('submit', async function(event) {
+        event.preventDefault(); // 폼의 기본 제출 동작 방지
+
+        // 입력 필드 값 가져오기
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+
+        // 유효성 검사
+        if (!email || !password) {
+            alert('이메일과 비밀번호를 모두 입력해주세요.');
+            return;
+        }
+
+        try {
+            // 로그인 API 요청
+            const response = await fetch('/api/members/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email, password })
+            });
+
+            if (response.ok) {
+                // 성공적인 응답일 경우 JWT 토큰을 헤더에서 가져오기
+                const token = response.headers.get('Authorization');
+
+                if (token) {
+                    // JWT 토큰을 로컬 스토리지에 저장 (또는 세션 스토리지)
+                    localStorage.setItem('jwtToken', token);
+                    alert('로그인에 성공했습니다!');
+                    // 로그인 성공 시 홈 또는 다른 페이지로 리디렉션
+                    window.location.href = '/'; // 원하는 리디렉션 경로 설정
+                } else {
+                    alert('토큰이 전달되지 않았습니다.');
+                }
+            } else {
+                const errorMessage = await response.text();
+                alert(`로그인 실패: \${errorMessage}`);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('로그인 중 문제가 발생했습니다.');
+        }
+    });
+</script>
 
 </body>
 </html>
