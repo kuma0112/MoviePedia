@@ -13,7 +13,11 @@
 <body>
 <!-- 네비게이션 바 -->
 <div class="navbar">
-    <div class="logo">MoviePedia</div>
+    <div class="logo">
+        <a href="/">
+            <img src="${pageContext.request.contextPath}/images/logo.png" alt="MoviePedia 로고">
+        </a>
+    </div>
     <div class="search-bar">
         <input type="text" placeholder="콘텐츠, 인물, 컬렉션 검색">
         <button>검색</button>

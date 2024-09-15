@@ -19,6 +19,12 @@ body {
     color: #FF0050;
 }
 
+/* 로고 이미지 스타일 */
+.logo img {
+    width: 150px;  /* 로고의 너비를 100px로 설정 */
+    height: auto;  /* 높이는 자동으로 조정하여 비율을 유지 */
+}
+
 .navbar .search-bar {
     display: flex;
     align-items: center;
