@@ -5,7 +5,6 @@ import com.supershy.moviepedia.movie.dto.ReviewList;
 import com.supershy.moviepedia.movie.dto.MovieListDto;
 import com.supershy.moviepedia.movie.entity.Movie;
 import com.supershy.moviepedia.movie.repository.MovieRepository;
-import com.supershy.moviepedia.review.entity.Review;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
