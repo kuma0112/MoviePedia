@@ -9,6 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <!-- CSS 파일 링크 -->
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
+    <link rel="icon" href="data:;base64,=">
 </head>
 <body>
 
