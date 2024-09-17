@@ -30,12 +30,9 @@ public class LikeServiceImpl implements LikeService {
     private final MovieRepository movieRepository;
 
     @Override
-    public String insertLike(Long memberId, Long movieId) {
-        // 추후 삭제 : 로그인한 멤버의 정보를 시큐리티 컨텍스트에서 추출하여 서비스 레이어까지 들고 오기 때문.
-        // 컨트롤러에서 memberId가 아니라 member 추후 받도록 수정할 것.
-        Member member = memberRepository.findById(memberId).orElseThrow(() -> new EntityNotFoundException("찾으시는 멤버가 없습니다."));
+    public String insertLike(Member member, Long movieId) {
         Movie movie = movieRepository.findById(movieId).orElseThrow(() -> new EntityNotFoundException("찾으시는 영화가 없습니다."));
-
+        Long memberId = member.getMemberId();
         if (!likeRepository.existsByMember_MemberIdAndMovie_MovieId(memberId, movieId)) {
             Like like = new Like(member, movie);
             likeRepository.save(like);
