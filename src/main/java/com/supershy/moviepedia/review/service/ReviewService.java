@@ -2,8 +2,7 @@ package com.supershy.moviepedia.review.service;
 
 import com.supershy.moviepedia.member.entity.Member;
 import com.supershy.moviepedia.review.dto.ReviewDto;
-
-import java.util.List;
+import com.supershy.moviepedia.review.dto.ReviewListDto;
 
 public interface ReviewService {
 
@@ -15,5 +14,5 @@ public interface ReviewService {
 
     void deleteReview(Long reviewId, Member member, Long movieId);
 
-    List<ReviewDto> getReviewList(Long movieId);
+    ReviewListDto getReviewList(Long movieId, int page, int size);
 }

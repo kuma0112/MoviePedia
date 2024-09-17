@@ -5,11 +5,16 @@ import com.supershy.moviepedia.member.repository.MemberRepository;
 import com.supershy.moviepedia.movie.entity.Movie;
 import com.supershy.moviepedia.movie.repository.MovieRepository;
 import com.supershy.moviepedia.review.dto.ReviewDto;
+import com.supershy.moviepedia.review.dto.ReviewListDto;
 import com.supershy.moviepedia.review.entity.Review;
 import com.supershy.moviepedia.review.repository.ReviewRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -74,10 +79,14 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public List<ReviewDto> getReviewList(Long movieId) {
-        List<Review> reviews = reviewRepository.findAllByMovie_MovieId(movieId);
-        return reviews.stream()
+    public ReviewListDto getReviewList(Long movieId, int page, int size) {
+        Sort sortObj = Sort.by(Sort.Direction.DESC, "movie.movieId");
+        Pageable pageable = PageRequest.of(page - 1, size, sortObj);
+        Page<Review> reviews = reviewRepository.findAllReviewsWithMovieAndMember(movieId, pageable);
+        List<ReviewDto> reviewDtos = reviews.getContent().stream()
                 .map(ReviewDto::fromEntity)
                 .collect(Collectors.toList());
+
+        return new ReviewListDto(reviewDtos, (int) reviews.getTotalElements());
     }
 }

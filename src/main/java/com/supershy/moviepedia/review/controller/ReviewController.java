@@ -2,6 +2,7 @@ package com.supershy.moviepedia.review.controller;
 
 import com.supershy.moviepedia.member.entity.Member;
 import com.supershy.moviepedia.review.dto.ReviewDto;
+import com.supershy.moviepedia.review.dto.ReviewListDto;
 import com.supershy.moviepedia.review.service.ReviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -42,8 +43,9 @@ public class ReviewController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ReviewDto>> getReviewList(@PathVariable Long movieId) {
-        List<ReviewDto> reviewDtos = reviewService.getReviewList(movieId);
-        return ResponseEntity.ok(reviewDtos);
+    public ResponseEntity<ReviewListDto> getReviewList(@PathVariable Long movieId,
+                                                       @RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "10") int size) {
+        ReviewListDto reviewListDto = reviewService.getReviewList(movieId, page, size);
+        return ResponseEntity.ok(reviewListDto);
     }
 }
