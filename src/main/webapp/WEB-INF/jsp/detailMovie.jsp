@@ -67,5 +67,59 @@
     </div>
 </section>
 
+<section class="movie-reviews">
+    <h2>리뷰</h2>
+    <div id="review-cards-container" class="review-cards-container">
+        <!-- 리뷰 카드가 여기에 동적으로 추가될 예정 -->
+    </div>
+    <!-- 더보기 버튼 -->
+    <button id="load-more" class="load-more-btn">더보기</button>
+</section>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const reviewContainer = document.getElementById("review-cards-container");
+        const loadMoreBtn = document.getElementById("load-more");
+        let currentPage = 0; // 페이지 번호
+        const reviewsPerPage = 10; // 한 번에 가져올 리뷰 개수
+        const movieId = ${movie.movieId}; // movieId 변수 추가
+
+        // 리뷰 가져오는 함수
+        async function fetchReviews() {
+            currentPage++;
+            const response = await fetch(`/api/movies/${movieId}/reviews?page=${currentPage}&size=${reviewsPerPage}`);
+            const reviewsData = await response.json();
+            const reviews = reviewsData.reviewList;
+
+            // 리뷰를 화면에 추가
+            reviews.forEach(review => {
+                console.log(review.reviewId);
+                const reviewCard = `
+                    <div class="review-card">
+                        <div class="review-header">
+                            <h3>\${review.nickname}</h3>
+                        </div>
+                        <div class="review-body">
+                            <p>\${review.content}</p>
+                        </div>
+                    </div>
+                `;
+                reviewContainer.innerHTML += reviewCard;
+            });
+
+            // 리뷰가 모두 로드되었으면 더보기 버튼 숨기기
+            if ((currentPage * reviewsPerPage) >= reviewsData.totalElements) {
+                loadMoreBtn.style.display = "none";
+            }
+        }
+
+        // 페이지 로드 시 첫 번째 리뷰 세트를 가져옴
+        fetchReviews();
+
+        // 더보기 버튼 클릭 시 추가 리뷰 가져오기
+        loadMoreBtn.addEventListener("click", fetchReviews);
+    });
+</script>
+
 </body>
 </html>

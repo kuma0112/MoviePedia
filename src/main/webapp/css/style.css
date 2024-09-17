@@ -394,3 +394,45 @@ button[type="submit"]:hover {
     line-height: 1.6;
     color: #333;
 }
+
+/* 리뷰 섹션 스타일 */
+.movie-reviews {
+    margin-top: 50px;
+    text-align: center;
+}
+
+.review-cards-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center; /* 가운데 정렬 */
+}
+
+.review-card {
+    width: 18%; /* 한 줄에 5개씩 */
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+}
+
+.review-header h3 {
+    font-size: 16px;
+    margin-bottom: 5px;
+}
+
+.review-body p {
+    font-size: 14px;
+}
+
+/* 더보기 버튼 */
+.load-more-btn {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
