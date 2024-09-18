@@ -58,6 +58,9 @@
                 <h2>줄거리</h2>
                 <p>${movie.description}</p>
             </div>
+
+            <!-- 리뷰 쓰기 버튼 -->
+            <button id="write-review-btn" class="write-review-btn">리뷰 쓰기</button>
         </div>
 
         <!-- 영화 포스터 배치 -->
@@ -76,6 +79,18 @@
     <button id="load-more" class="load-more-btn">더보기</button>
 </section>
 
+<!-- 리뷰 작성 모달 -->
+<div id="review-modal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <span id="close-modal" class="close">&times;</span>
+        <h2>리뷰 작성</h2>
+        <form id="review-form">
+            <textarea id="review-content" rows="4" placeholder="리뷰를 작성하세요"></textarea>
+            <button type="submit">리뷰 제출</button>
+        </form>
+    </div>
+</div>
+
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         const reviewContainer = document.getElementById("review-cards-container");
@@ -93,7 +108,6 @@
 
             // 리뷰를 화면에 추가
             reviews.forEach(review => {
-                console.log(review.reviewId);
                 const reviewCard = `
                     <div class="review-card">
                         <div class="review-header">
@@ -117,7 +131,56 @@
         fetchReviews();
 
         // 더보기 버튼 클릭 시 추가 리뷰 가져오기
-        loadMoreBtn.addEventListener("click", fetchReviews);
+        loadMoreBtn.addEventListener("click", function () {
+            fetchReviews();
+        });
+
+        // 리뷰 쓰기 버튼 클릭 시 모달 열기
+        document.getElementById("write-review-btn").addEventListener("click", function () {
+            document.getElementById("review-modal").style.display = "flex";
+        });
+
+        // 모달 닫기 버튼 클릭 시 모달 닫기
+        document.getElementById("close-modal").addEventListener("click", function () {
+            document.getElementById("review-modal").style.display = "none";
+        });
+
+        // 리뷰 제출 시 서버에 요청을 보내고 리스트에 추가
+        document.getElementById("review-form").addEventListener("submit", async function (event) {
+            event.preventDefault(); // 폼 제출 방지
+
+            const reviewContent = document.getElementById("review-content").value;
+            if (!reviewContent.trim()) return alert("리뷰 내용을 입력하세요.");
+
+            const token = localStorage.getItem("jwtToken");
+
+            const response = await fetch(`/api/movies/${movieId}/reviews`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': token
+                },
+                body: JSON.stringify({
+                    content: reviewContent
+                })
+            });
+
+            if (response.ok) {
+                await fetchReviews(true);  // 기존 리뷰 리스트를 다시 로드
+
+                // 모달 창 닫기 및 폼 초기화
+                document.getElementById("review-modal").style.display = "none";
+                document.getElementById("review-content").value = ''; // 폼 초기화
+            } else {
+                alert("리뷰 작성에 실패했습니다.");
+            }
+        });
+
+        // 모달 열기 시 폼 초기화
+        document.getElementById("write-review-btn").addEventListener("click", function() {
+            document.getElementById("review-modal").style.display = "flex";
+            document.getElementById("review-content").value = ''; // 모달 열 때 입력값 초기화
+        });
     });
 </script>
 
