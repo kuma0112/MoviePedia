@@ -19,7 +19,11 @@ public class ReviewController {
     private final ReviewService reviewService;
 
     @PostMapping
-    public ResponseEntity<String> createReview(@PathVariable Long movieId, @RequestBody ReviewDto reviewDto, @AuthenticationPrincipal Member member) {
+    public ResponseEntity<String> createReview(@PathVariable Long movieId, @RequestBody ReviewDto reviewDto,
+                                               @AuthenticationPrincipal(expression = "member") Member member) {
+        if (member == null) {
+            throw new IllegalArgumentException("로그인된 사용자가 없습니다.");
+        }
         reviewService.createReview(member, movieId, reviewDto);
         return ResponseEntity.ok("리뷰가 성공적으로 생성되었습니다.");
     }
@@ -31,20 +35,22 @@ public class ReviewController {
 
     @PutMapping("/{reviewId}")
     public ResponseEntity<ReviewDto> updateReview(@PathVariable Long movieId, @PathVariable Long reviewId,
-                                                  @RequestBody ReviewDto reviewDto, @AuthenticationPrincipal Member member) {
+                                                  @RequestBody ReviewDto reviewDto,
+                                                  @AuthenticationPrincipal(expression = "member") Member member) {
         return ResponseEntity.ok(reviewService.updateReview(member, movieId, reviewId, reviewDto));
     }
 
     @DeleteMapping("/{reviewId}")
     public ResponseEntity<String> deleteReview(@PathVariable Long movieId, @PathVariable Long reviewId
-                                                , @AuthenticationPrincipal Member member) {
+                                                , @AuthenticationPrincipal(expression = "member") Member member) {
         reviewService.deleteReview(reviewId, member, movieId);
         return ResponseEntity.ok("리뷰가 성공적으로 삭제되었습니다.");
     }
 
     @GetMapping
     public ResponseEntity<ReviewListDto> getReviewList(@PathVariable Long movieId,
-                                                       @RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "10") int size) {
+                                                       @RequestParam(defaultValue = "1") int page,
+                                                       @RequestParam(defaultValue = "10") int size) {
         ReviewListDto reviewListDto = reviewService.getReviewList(movieId, page, size);
         return ResponseEntity.ok(reviewListDto);
     }
