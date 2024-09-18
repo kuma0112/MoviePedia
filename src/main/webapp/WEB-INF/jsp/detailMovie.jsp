@@ -60,7 +60,12 @@
             </div>
 
             <!-- 리뷰 쓰기 버튼 -->
-            <button id="write-review-btn" class="write-review-btn">리뷰 쓰기</button>
+            <div class="review-actions">
+                <button id="write-review-btn" class="write-review-btn">리뷰 쓰기</button>
+                <button id="like-btn" class="like-btn">
+                    <span id="heart-icon">&#10084;</span> 좋아요
+                </button>
+            </div>
         </div>
 
         <!-- 영화 포스터 배치 -->
@@ -92,7 +97,7 @@
 </div>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
+    document.addEventListener("DOMContentLoaded", function () {
         const reviewContainer = document.getElementById("review-cards-container");
         const loadMoreBtn = document.getElementById("load-more");
         let currentPage = 0; // 페이지 번호
@@ -177,11 +182,50 @@
         });
 
         // 모달 열기 시 폼 초기화
-        document.getElementById("write-review-btn").addEventListener("click", function() {
+        document.getElementById("write-review-btn").addEventListener("click", function () {
             document.getElementById("review-modal").style.display = "flex";
             document.getElementById("review-content").value = ''; // 모달 열 때 입력값 초기화
         });
     });
+
+    // 좋아요 기능
+    document.addEventListener("DOMContentLoaded", function() {
+        const likeBtn = document.getElementById("like-btn");
+        const movieId = ${movie.movieId}; // movieId 변수 추가
+        const token = localStorage.getItem("jwtToken");
+
+        // 좋아요 버튼 클릭 이벤트
+        likeBtn.addEventListener("click", async function() {
+            if (!token) {
+                alert("로그인이 필요합니다.");
+                return;
+            }
+
+            const response = await fetch(`/api/movies/${movieId}/likes`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': token,
+                    'Content-Type': 'application/json'
+                },
+            });
+
+            if (response.ok) {
+                const result = await response.text(); // JSON 대신 텍스트로 처리
+
+                if (result === "좋아요가 등록되었습니다.") {
+                    console.log("좋아요 등록됨");
+                    likeBtn.classList.add("liked"); // 좋아요 상태로 변경
+                } else if (result === "좋아요가 취소되었습니다.") {
+                    console.log("좋아요 취소됨");
+                    likeBtn.classList.remove("liked"); // 좋아요 취소 상태로 변경
+                }
+            } else {
+                alert("좋아요 처리 중 오류가 발생했습니다.");
+            }
+        });
+    });
+
+
 </script>
 
 </body>
