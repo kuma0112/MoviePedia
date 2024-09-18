@@ -16,13 +16,14 @@ public class LikeController {
     private final LikeService likeService;
 
     @PostMapping("/{movieId}/likes")
-    public ResponseEntity<?> insertLike(@PathVariable("movieId") Long movieId, @AuthenticationPrincipal Member member) {
+    public ResponseEntity<?> insertLike(@PathVariable("movieId") Long movieId,
+                                        @AuthenticationPrincipal(expression = "member") Member member) {
         return ResponseEntity.status(HttpStatus.OK).body(likeService.insertLike(member, movieId));
     }
 
     @GetMapping("/likes")
     public ResponseEntity<?> getLikedMovies(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size,
-                                            @AuthenticationPrincipal Member member) {
+                                            @AuthenticationPrincipal(expression = "member") Member member) {
         return ResponseEntity.status(HttpStatus.OK).body(likeService.getLikedMovies(page, size, member.getMemberId()));
     }
 }
