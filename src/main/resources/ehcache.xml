@@ -1,0 +1,42 @@
+<config xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+        xmlns='http://www.ehcache.org/v3'
+        xsi:schemaLocation="http://www.ehcache.org/v3 http://www.ehcache.org/schema/ehcache-core.xsd">
+
+    <!-- 캐시의 이름을 지정한다. 이름은 rankings-->
+    <cache alias="rankings">
+        <!-- 캐시의 키 타입은 String, 밸류 타입은 Object이다. -->
+        <key-type>java.lang.String</key-type>
+        <value-type>java.lang.Object</value-type>
+        <!-- 캐시 만료 시간을 설정한다. 1시간이 지나면 만료되도록 설정하였다. -->
+        <expiry>
+            <!-- ttl은 time to live의 약자. 1시간 동안 살아있다?는 뜻이다. -->
+            <ttl unit="hours">1</ttl>
+            <!-- unit : days, hours, minutes, seconds, millis, micros, nanos 단위까지 설정이 가능하다-->
+        </expiry>
+
+        <!-- 캐시의 생성, 삭제를 이벤트로 처리하여 모니터링하는 것도 가능하다
+        CacheEventLogger 클래스의 경로를 써준 다음
+        CREATED 생성, EXPIRED 만료 될 때마다 ASYNCHRONOUS 비동기적으로 UNORDERED 순서없이 이벤트를 처리한다.-->
+        <listeners>
+            <listener>
+                <class>com.supershy.moviepedia.common.cache.CacheEventLogger</class>
+                <event-firing-mode>ASYNCHRONOUS</event-firing-mode>
+                <event-ordering-mode>UNORDERED</event-ordering-mode>
+                <events-to-fire-on>CREATED</events-to-fire-on>
+                <events-to-fire-on>EXPIRED</events-to-fire-on>
+            </listener>
+        </listeners>
+
+        <!-- 몇 개의 캐시를 저장할 수 있는지 지정한다. 100개의 엔트리를 캐싱할 수 있도록 설정.  -->
+        <resources>
+            <!-- heap은 힙 메모리에 캐시 데이터를 관리하는 방식으로 ehcache 3.x 버전부터 deprecated 되었다.
+            이유는 heap메모리는 jvm 내부에서 사용되기 때문에 가비지 컬렉터의 대상이 되어 캐시가 지워질 수 있기 때문.
+            대안으로는 offheap (힙 메모리 외부에 저장), disk persistent(디스크 메모리 사용) 이 있다. -->
+            <!-- <heap unit="entries">100</heap> -->
+            <offheap unit="MB">100</offheap>
+            <!-- <disk persistent="true" unit="MB">500</disk> -->
+        </resources>
+    </cache>
+</config>
+
+
