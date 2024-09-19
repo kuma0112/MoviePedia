@@ -2,26 +2,25 @@ package com.supershy.moviepedia.auth.config;
 
 import com.supershy.moviepedia.auth.filter.JwtAuthenticationFilter;
 import com.supershy.moviepedia.auth.utils.JwtTokenProvider;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
+@RequiredArgsConstructor
 public class SecurityConfig {
 
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
-
-    public SecurityConfig(PasswordEncoder passwordEncoder, JwtTokenProvider jwtTokenProvider) {
-        this.passwordEncoder = passwordEncoder;
-        this.jwtTokenProvider = jwtTokenProvider;
-    }
+    private final UserDetailsService detailsService;
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
@@ -41,7 +40,7 @@ public class SecurityConfig {
                         .requestMatchers("/", "/pages/**", "/WEB-INF/jsp/**").permitAll() // JSP 페이지에 대한 접근 허용
                         .requestMatchers("/css/**", "/images/**", "/js/**").permitAll() // 정적 리소스 허용
                         .anyRequest().authenticated()) // 그 외 모든 요청은 인증 필요
-                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),
+                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider, detailsService),
                         UsernamePasswordAuthenticationFilter.class)
                 .formLogin(form -> form.disable())
                 .logout(logout -> logout.disable());
