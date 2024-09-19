@@ -24,6 +24,14 @@ repositories {
 }
 
 dependencies {
+	// cache
+	implementation 'org.springframework.boot:spring-boot-starter-cache'
+	implementation 'org.ehcache:ehcache'
+
+	// javax xml bind (java 클래스와 xml 매핑하는 데 도움)
+	implementation 'javax.xml.bind:jaxb-api:2.3.1'
+	implementation 'org.glassfish.jaxb:jaxb-runtime:2.3.1'
+
 	// tomcat jasper
 	implementation 'org.apache.tomcat.embed:tomcat-embed-jasper'
 
