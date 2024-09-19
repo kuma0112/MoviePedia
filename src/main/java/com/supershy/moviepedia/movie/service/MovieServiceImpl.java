@@ -1,22 +1,21 @@
 package com.supershy.moviepedia.movie.service;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
+import com.supershy.moviepedia.movie.dto.MovieDto;
+import com.supershy.moviepedia.movie.dto.MovieListDto;
+import com.supershy.moviepedia.movie.dto.ReviewList;
+import com.supershy.moviepedia.movie.entity.Movie;
+import com.supershy.moviepedia.movie.repository.MovieRepository;
+import jakarta.persistence.EntityNotFoundException;
+import lombok.AllArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.supershy.moviepedia.movie.dto.MovieDto;
-import com.supershy.moviepedia.movie.dto.MovieListDto;
-import com.supershy.moviepedia.movie.dto.ReviewList;
-import com.supershy.moviepedia.movie.entity.Movie;
-import com.supershy.moviepedia.movie.repository.MovieRepository;
-
-import jakarta.persistence.EntityNotFoundException;
-import lombok.AllArgsConstructor;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -25,6 +24,7 @@ public class MovieServiceImpl implements MovieService {
 
     private final MovieRepository movieRepository;
 
+    @Cacheable(value = "rankings", key = "T(java.time.LocalDateTime).now().toString()")
     @Override
     public MovieListDto getRanking(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
