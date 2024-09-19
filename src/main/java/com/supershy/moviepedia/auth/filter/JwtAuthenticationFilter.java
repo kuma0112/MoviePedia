@@ -35,7 +35,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     new UsernamePasswordAuthenticationToken(
                             userDetails, // principal (사용자 식별자)
                             null,  // credentials (자격 증명, JWT에서는 불필요하므로 null)
-                            Collections.emptyList() // authorities (권한 목록)
+                            userDetails.getAuthorities() // authorities (권한 목록)
                     );
             // 생성된 Authentication 객체를 SecurityContext에 설정
             SecurityContextHolder.getContext().setAuthentication(authentication);
