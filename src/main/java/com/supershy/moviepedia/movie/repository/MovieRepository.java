@@ -16,4 +16,8 @@ public interface MovieRepository extends CrudRepository<Movie, Long> {
 
     @Query(value = "SELECT DISTINCT m FROM Movie m JOIN FETCH m.genre JOIN FETCH m.reviews r JOIN FETCH r.member WHERE m.movieId = :movieId")
     Optional<Movie> findById(Long movieId);
+    
+    @Query(value = "SELECT DISTINCT m FROM Movie m LEFT JOIN FETCH m.genre LEFT JOIN FETCH m.reviews r LEFT JOIN FETCH r.member WHERE m.releaseState = 'UPCOMING'",
+    	       countQuery = "SELECT COUNT(m) FROM Movie m WHERE m.releaseState = 'UPCOMING'")
+    	Page<Movie> findUpcomingMovies(Pageable pageable);
 }

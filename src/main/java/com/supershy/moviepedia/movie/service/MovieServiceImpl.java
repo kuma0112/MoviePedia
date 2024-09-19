@@ -1,20 +1,22 @@
 package com.supershy.moviepedia.movie.service;
 
-import com.supershy.moviepedia.movie.dto.MovieDto;
-import com.supershy.moviepedia.movie.dto.ReviewList;
-import com.supershy.moviepedia.movie.dto.MovieListDto;
-import com.supershy.moviepedia.movie.entity.Movie;
-import com.supershy.moviepedia.movie.repository.MovieRepository;
-import jakarta.persistence.EntityNotFoundException;
-import lombok.AllArgsConstructor;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import com.supershy.moviepedia.movie.dto.MovieDto;
+import com.supershy.moviepedia.movie.dto.MovieListDto;
+import com.supershy.moviepedia.movie.dto.ReviewList;
+import com.supershy.moviepedia.movie.entity.Movie;
+import com.supershy.moviepedia.movie.repository.MovieRepository;
+
+import jakarta.persistence.EntityNotFoundException;
+import lombok.AllArgsConstructor;
 
 @Service
 @Transactional
@@ -54,5 +56,26 @@ public class MovieServiceImpl implements MovieService {
                         .build())
                 .collect(Collectors.toList());
         return MovieDto.fromEntity(movie, reviewList);
+    }
+    
+    @Override
+    public MovieListDto getUpcomingMovies(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Movie> moviePage = movieRepository.findUpcomingMovies(pageable);
+
+        List<MovieDto> movieDtoList = moviePage.stream()
+            .map(movie -> {
+                List<ReviewList> reviewList = movie.getReviews().stream()
+                    .map(review -> ReviewList.builder()
+                        .content(review.getContent())
+                        .nickname(review.getMember().getNickname())
+                        .build())
+                    .collect(Collectors.toList());
+
+                return MovieDto.fromEntity(movie, reviewList);
+            })
+            .collect(Collectors.toList());
+
+        return new MovieListDto(movieDtoList, (int) moviePage.getTotalElements());
     }
 }
