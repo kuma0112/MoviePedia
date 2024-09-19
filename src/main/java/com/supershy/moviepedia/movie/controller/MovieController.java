@@ -25,4 +25,13 @@ public class MovieController {
         MovieListDto movieRanking = movieService.getRanking(page, size);
         return ResponseEntity.status(HttpStatus.OK).body(movieRanking);  // 영화 리스트와 총 개수를 반환
     }
+    
+
+    @GetMapping("/upcoming")
+    public ResponseEntity<?> getUpcomingMovies(
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "10") int size) {
+        MovieListDto upcomingMovies = movieService.getUpcomingMovies(page, size);
+        return ResponseEntity.status(HttpStatus.OK).body(upcomingMovies);  // 상영 예정 영화 리스트와 총 개수를 반환
+    }
 }
