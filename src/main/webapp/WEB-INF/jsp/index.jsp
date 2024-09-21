@@ -25,11 +25,14 @@
         <button>검색</button>
     </div>
     <div class="user-options">
-        <a href="/pages/register">회원가입</a>
-        <a href="/pages/login">로그인</a>
+        <span id="user-nickname" style="display: none;"></span>
+        <a href="/pages/register" id="register-link">회원가입</a>
+        <a href="/pages/login" id="login-link">로그인</a>
+        <a href="/pages/mypage" id="mypage-link" style="display: none;">마이페이지</a>
+        <a href="#" id="logout-link" style="display: none;">로그아웃</a>
     </div>
 </nav>
-       
+
 <!-- 박스오피스 순위 -->
 <section class="box-office">
     <h2>박스오피스 순위</h2>
@@ -41,21 +44,65 @@
 <!-- 개봉 예정작 섹션 -->
 <section class="upcoming-section">
     <h2>공개 예정작</h2>
-    <div class="upcoming-grid" id="upcomingListContainer">
-        <!-- 개봉 예정 영화 카드들이 여기에 동적으로 추가됩니다 -->
+    <div class="upcoming-grid">
+        <div class="upcoming-card">
+            <img src="https://via.placeholder.com/150x200" alt="Upcoming Movie 1">
+            <div class="release-date">2024.09.14</div>
+            <div class="title">영화 제목 1</div>
+        </div>
     </div>
 </section>
-
 <script>
     let LIST_ROW_COUNT = 10; // 한 페이지에 10개 로우
     let OFFSET = 0;
 
     window.onload = function () {
-        listMovie(); // 박스오피스 순위 로드
-        listUpcomingMovies(); // 개봉 예정작 로드
+        checkLoginStatus();
+        listMovie();
     }
 
-    // 박스오피스 순위 가져오기
+    // 로그아웃 기능 추가
+    document.getElementById('logout-link').addEventListener('click', function(e) {
+        e.preventDefault();
+        logout();
+    });
+
+    function checkLoginStatus() {
+        const token = localStorage.getItem('token');
+        const nickname = localStorage.getItem('nickname');
+        updateUI(nickname);
+    }
+
+    function updateUI(nickname) {
+        const userNicknameElement = document.getElementById('user-nickname');
+        const registerLink = document.getElementById('register-link');
+        const loginLink = document.getElementById('login-link');
+        const logoutLink = document.getElementById('logout-link');
+        const mypageLink = document.getElementById('mypage-link');
+
+        if (nickname) {
+            userNicknameElement.textContent = nickname;
+            userNicknameElement.style.display = 'inline';
+            registerLink.style.display = 'none';
+            loginLink.style.display = 'none';
+            logoutLink.style.display = 'inline';
+            mypageLink.style.display = 'inline-block'; // 마이페이지 버튼 표시
+        } else {
+            userNicknameElement.style.display = 'none';
+            registerLink.style.display = 'inline';
+            loginLink.style.display = 'inline';
+            logoutLink.style.display = 'none';
+            mypageLink.style.display = 'none'; // 마이페이지 버튼 숨김
+        }
+    }
+
+    function logout() {
+        localStorage.removeItem('token');
+        localStorage.removeItem('nickname');
+        updateUI(null);
+        window.location.href = '/';
+    }
+
     async function listMovie() {
         const movieListContainer = document.getElementById('movieListContainer');
         movieListContainer.innerHTML = '<p>영화 데이터를 불러오는 중입니다...</p>';
@@ -90,7 +137,6 @@
     }
 
     function makeListHtml(movieList) {
-        const movieListContainer = document.getElementById('movieListContainer');
         movieListContainer.innerHTML = '';  // 먼저 기존 내용을 지우고
         const fragment = document.createDocumentFragment();  // Fragment 사용
         movieList.forEach((movie, index) => {
@@ -111,59 +157,15 @@
         movieListContainer.appendChild(fragment);  // 마지막에 한 번에 추가
     }
 
-    // 개봉 예정작 가져오기
-    async function listUpcomingMovies() {
-        const upcomingListContainer = document.getElementById('upcomingListContainer');
-        upcomingListContainer.innerHTML = '<p>개봉 예정 영화를 불러오는 중입니다...</p>';
-
-        try {
-            let fetchOptions = {
-                headers: {
-                    'ajax': 'true'
-                }
-            };
-
-            let url = "/api/movies/upcoming";
-            let urlParams = "?page=" + OFFSET + "&size=" + LIST_ROW_COUNT;
-            let response = await fetch(url + urlParams, fetchOptions);
-
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-
-            let data = await response.json();
-            console.log("Received upcoming movies:", data); // 데이터 로그 출력
-
-            if (data.movieList && data.movieList.length > 0) {
-                makeUpcomingListHtml(data.movieList);
-            } else {
-                upcomingListContainer.innerHTML = '<p>표시할 개봉 예정 영화가 없습니다.</p>';
-            }
-        } catch (error) {
-            console.error("Error fetching upcoming movie data:", error);
-            upcomingListContainer.innerHTML = `<p>개봉 예정 영화를 불러오는 중 오류가 발생했습니다: ${error.message}</p>`;
-        }
-    }
-
-    function makeUpcomingListHtml(movieList) {
-        const upcomingListContainer = document.getElementById('upcomingListContainer');
-        upcomingListContainer.innerHTML = '';  // 먼저 기존 내용을 지우고
-        const fragment = document.createDocumentFragment();  // Fragment 사용
-        movieList.forEach(movie => {
-            const movieCard = document.createElement('div');
-            movieCard.classList.add('upcoming-card');
-
-            movieCard.innerHTML = `
-            <a href="/pages/movies/\${movie.movieId}">
-                <img src="\${movie.imageUrl}" alt="\${movie.title} 포스터">
-            </a>
-            <div class="release-date">\${movie.releaseDate}</div>
-            <div class="title">\${movie.title}</div>
-        `;
-            fragment.appendChild(movieCard);  // Fragment에 추가
-        });
-        upcomingListContainer.appendChild(fragment);  // 마지막에 한 번에 추가
-    }
+    // 로그아웃 기능 추가
+    document.getElementById('logout-link').addEventListener('click', function(e) {
+        checkLoginStatus();
+        e.preventDefault();
+        localStorage.removeItem('token');
+        localStorage.removeItem('nickname');
+        updateUI(null);
+        window.location.href = '/';  // 홈페이지로 리디렉션
+    });
 </script>
 
 </body>

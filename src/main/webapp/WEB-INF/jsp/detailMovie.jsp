@@ -24,8 +24,11 @@
         <button>검색</button>
     </div>
     <div class="user-options">
-        <a href="/pages/register">회원가입</a>
-        <a href="/pages/login">로그인</a>
+        <span id="user-nickname" style="display: none;"></span>
+        <a href="/pages/register" id="register-link">회원가입</a>
+        <a href="/pages/login" id="login-link">로그인</a>
+        <a href="/pages/mypage" id="mypage-link" style="display: none;">마이페이지</a>
+        <a href="#" id="logout-link" style="display: none;">로그아웃</a>
     </div>
 </nav>
 
@@ -47,7 +50,9 @@
                 <p>${movie.reservationRate}%</p>
                 <div class="reservation-rate-bar">
                     <!-- style 속성으로 너비를 동적으로 설정 -->
-                    <div class="reservation-rate-fill" style="width: ${movie.reservationRate}%;"></div>
+                    <div class="reservation-rate-fill" style="width: ${movie.reservationRate}%;">
+                        ${movie.reservationRate}%
+                    </div>
                 </div>
             </div>
 
@@ -103,15 +108,11 @@
         const movieId = ${movie.movieId}; // movieId 변수 추가
 
         // 리뷰 가져오는 함수
-        async function fetchReviews(reset = false) {
-            if (reset) {
-                currentPage = 0;
-                reviewContainer.innerHTML = ''; // 리뷰 리스트 초기화
-            }
+        async function fetchReviews() {
             currentPage++;
             const response = await fetch(`/api/movies/${movieId}/reviews?page=${currentPage}&size=${reviewsPerPage}`);
             const reviewsData = await response.json();
-            const reviews = reviewsData.reviewList;//---------------------------------------------
+            const reviews = reviewsData.reviewList;
 
             // 리뷰를 화면에 추가
             reviews.forEach(review => {
@@ -173,8 +174,10 @@
             });
 
             if (response.ok) {
-                await fetchReviews(true);  // 기존 리뷰 리스트를 초기화하고 다시 로드
-                document.getElementById("review-modal").style.display = "none"; // 모달 창 닫기
+                await fetchReviews(true);  // 기존 리뷰 리스트를 다시 로드
+
+                // 모달 창 닫기 및 폼 초기화
+                document.getElementById("review-modal").style.display = "none";
                 document.getElementById("review-content").value = ''; // 폼 초기화
             } else {
                 alert("리뷰 작성에 실패했습니다.");
@@ -213,8 +216,10 @@
                 const result = await response.text(); // JSON 대신 텍스트로 처리
 
                 if (result === "좋아요가 등록되었습니다.") {
+                    console.log("좋아요 등록됨");
                     likeBtn.classList.add("liked"); // 좋아요 상태로 변경
                 } else if (result === "좋아요가 취소되었습니다.") {
+                    console.log("좋아요 취소됨");
                     likeBtn.classList.remove("liked"); // 좋아요 취소 상태로 변경
                 }
             } else {
@@ -222,6 +227,53 @@
             }
         });
     });
+
+    document.addEventListener("DOMContentLoaded", function () {
+        checkLoginStatus();
+
+        // 로그아웃 기능 추가
+        document.getElementById('logout-link').addEventListener('click', function(e) {
+            e.preventDefault();
+            logout();
+        });
+
+        function checkLoginStatus() {
+            const token = localStorage.getItem('token');
+            const nickname = localStorage.getItem('nickname');
+            updateUI(nickname);
+        }
+
+        function updateUI(nickname) {
+            const userNicknameElement = document.getElementById('user-nickname');
+            const registerLink = document.getElementById('register-link');
+            const loginLink = document.getElementById('login-link');
+            const logoutLink = document.getElementById('logout-link');
+            const mypageLink = document.getElementById('mypage-link');
+
+            if (nickname) {
+                userNicknameElement.textContent = nickname;
+                userNicknameElement.style.display = 'inline';
+                registerLink.style.display = 'none';
+                loginLink.style.display = 'none';
+                logoutLink.style.display = 'inline';
+                mypageLink.style.display = 'inline-block';
+            } else {
+                userNicknameElement.style.display = 'none';
+                registerLink.style.display = 'inline';
+                loginLink.style.display = 'inline';
+                logoutLink.style.display = 'none';
+                mypageLink.style.display = 'none';
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('nickname');
+            updateUI(null);
+            window.location.href = '/';
+        }
+    });
+
 </script>
 
 </body>
