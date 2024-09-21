@@ -20,4 +20,6 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
             "INNER JOIN FETCH r.member mem " +
             "WHERE m.movieId = :movieId")
     Page<Review> findAllReviewsWithMovieAndMember(@Param("movieId") Long movieId, Pageable pageable);
+
+    List<Review> findAllByMember_MemberId(Long memberId);
 }

@@ -8,6 +8,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
+
 public interface LikeRepository extends JpaRepository<Like, LikeId> {
     boolean existsByMember_MemberIdAndMovie_MovieId(Long memberId, Long movieId);
 
@@ -16,5 +18,8 @@ public interface LikeRepository extends JpaRepository<Like, LikeId> {
     @Query(value = "select m from Movie m join Like l on l.movie.movieId = m.movieId where l.member.memberId = :memberId",
             countQuery = "select count(m) from Movie m join Like l on l.movie.movieId = m.movieId where l.member.memberId = :memberId")
     Page<Movie> findAllByMember_MemberId(Long memberId, Pageable pageable);
+
+    @Query(value = "select m from Movie m join Like l on l.movie.movieId = m.movieId where l.member.memberId = :memberId")
+    List<Movie> findAllByMemberId(Long memberId);
 }
 
