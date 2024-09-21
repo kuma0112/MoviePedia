@@ -2,6 +2,8 @@ package com.supershy.moviepedia.member.service.impl;
 
 import com.supershy.moviepedia.auth.dto.LoginRequestDto;
 import com.supershy.moviepedia.auth.utils.JwtTokenProvider;
+import com.supershy.moviepedia.common.exception.InvalidCredentialsException;
+import com.supershy.moviepedia.common.exception.MemberNotFoundException;
 import com.supershy.moviepedia.member.dto.MemberDto;
 import com.supershy.moviepedia.member.entity.Member;
 import com.supershy.moviepedia.member.repository.MemberRepository;
@@ -12,6 +14,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 public class MemberServiceImpl implements MemberService {
@@ -46,14 +51,28 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public String loginMember(LoginRequestDto loginRequestDto) {
+    public Map<String, String> loginMember(LoginRequestDto loginRequestDto) {
         try {
+            // 이메일과 비밀번호로 인증
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(loginRequestDto.getEmail(), loginRequestDto.getPassword())
             );
-            return jwtTokenProvider.createToken(authentication.getName());
+
+            // JWT 토큰 생성
+            String token = jwtTokenProvider.createToken(authentication.getName());
+
+            // 이메일로 DB에서 회원 조회
+            Member member = memberRepository.findByEmail(loginRequestDto.getEmail())
+                    .orElseThrow(() -> new MemberNotFoundException("사용자를 찾을 수 없습니다."));
+
+            // 토큰과 닉네임 반환
+            Map<String, String> response = new HashMap<>();
+            response.put("token", token);
+            response.put("nickname", member.getNickname());
+
+            return response;
         } catch (AuthenticationException e) {
-            throw new RuntimeException("이메일 또는 비밀번호가 올바르지 않습니다.");
+            throw new InvalidCredentialsException("이메일 또는 비밀번호가 올바르지 않습니다.");
         }
     }
 }
