@@ -691,7 +691,6 @@ button[type="submit"]:hover {
 .mypage-review-card p {
     font-size: 20px; /* 리뷰 내용을 더 크게 */
     color: #333;
-    font-weight: bold; /* 볼드체 적용 */
     line-height: 1.5;
 }
 
