@@ -29,7 +29,7 @@
         <a href="/pages/login">로그인</a>
     </div>
 </nav>
-
+       
 <!-- 박스오피스 순위 -->
 <section class="box-office">
     <h2>박스오피스 순위</h2>
@@ -41,22 +41,21 @@
 <!-- 개봉 예정작 섹션 -->
 <section class="upcoming-section">
     <h2>공개 예정작</h2>
-    <div class="upcoming-grid">
-        <div class="upcoming-card">
-            <img src="https://via.placeholder.com/150x200" alt="Upcoming Movie 1">
-            <div class="release-date">2024.09.14</div>
-            <div class="title">영화 제목 1</div>
-        </div>
+    <div class="upcoming-grid" id="upcomingListContainer">
+        <!-- 개봉 예정 영화 카드들이 여기에 동적으로 추가됩니다 -->
     </div>
 </section>
+
 <script>
     let LIST_ROW_COUNT = 10; // 한 페이지에 10개 로우
     let OFFSET = 0;
 
     window.onload = function () {
-        listMovie();
+        listMovie(); // 박스오피스 순위 로드
+        listUpcomingMovies(); // 개봉 예정작 로드
     }
 
+    // 박스오피스 순위 가져오기
     async function listMovie() {
         const movieListContainer = document.getElementById('movieListContainer');
         movieListContainer.innerHTML = '<p>영화 데이터를 불러오는 중입니다...</p>';
@@ -91,6 +90,7 @@
     }
 
     function makeListHtml(movieList) {
+        const movieListContainer = document.getElementById('movieListContainer');
         movieListContainer.innerHTML = '';  // 먼저 기존 내용을 지우고
         const fragment = document.createDocumentFragment();  // Fragment 사용
         movieList.forEach((movie, index) => {
@@ -109,6 +109,60 @@
             fragment.appendChild(movieCard);  // Fragment에 추가
         });
         movieListContainer.appendChild(fragment);  // 마지막에 한 번에 추가
+    }
+
+    // 개봉 예정작 가져오기
+    async function listUpcomingMovies() {
+        const upcomingListContainer = document.getElementById('upcomingListContainer');
+        upcomingListContainer.innerHTML = '<p>개봉 예정 영화를 불러오는 중입니다...</p>';
+
+        try {
+            let fetchOptions = {
+                headers: {
+                    'ajax': 'true'
+                }
+            };
+
+            let url = "/api/movies/upcoming";
+            let urlParams = "?page=" + OFFSET + "&size=" + LIST_ROW_COUNT;
+            let response = await fetch(url + urlParams, fetchOptions);
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            let data = await response.json();
+            console.log("Received upcoming movies:", data); // 데이터 로그 출력
+
+            if (data.movieList && data.movieList.length > 0) {
+                makeUpcomingListHtml(data.movieList);
+            } else {
+                upcomingListContainer.innerHTML = '<p>표시할 개봉 예정 영화가 없습니다.</p>';
+            }
+        } catch (error) {
+            console.error("Error fetching upcoming movie data:", error);
+            upcomingListContainer.innerHTML = `<p>개봉 예정 영화를 불러오는 중 오류가 발생했습니다: ${error.message}</p>`;
+        }
+    }
+
+    function makeUpcomingListHtml(movieList) {
+        const upcomingListContainer = document.getElementById('upcomingListContainer');
+        upcomingListContainer.innerHTML = '';  // 먼저 기존 내용을 지우고
+        const fragment = document.createDocumentFragment();  // Fragment 사용
+        movieList.forEach(movie => {
+            const movieCard = document.createElement('div');
+            movieCard.classList.add('upcoming-card');
+
+            movieCard.innerHTML = `
+            <a href="/pages/movies/\${movie.movieId}">
+                <img src="\${movie.imageUrl}" alt="\${movie.title} 포스터">
+            </a>
+            <div class="release-date">\${movie.releaseDate}</div>
+            <div class="title">\${movie.title}</div>
+        `;
+            fragment.appendChild(movieCard);  // Fragment에 추가
+        });
+        upcomingListContainer.appendChild(fragment);  // 마지막에 한 번에 추가
     }
 </script>
 
