@@ -2,12 +2,16 @@ package com.supershy.moviepedia.member.service.impl;
 
 import com.supershy.moviepedia.auth.dto.LoginRequestDto;
 import com.supershy.moviepedia.auth.utils.JwtTokenProvider;
+import com.supershy.moviepedia.like.repository.LikeRepository;
 import com.supershy.moviepedia.member.dto.MemberDto;
+import com.supershy.moviepedia.member.dto.MyMovieDto;
 import com.supershy.moviepedia.member.dto.MyPageDto;
 import com.supershy.moviepedia.member.dto.MyPageReviewDto;
 import com.supershy.moviepedia.member.entity.Member;
 import com.supershy.moviepedia.member.repository.MemberRepository;
 import com.supershy.moviepedia.member.service.MemberService;
+import com.supershy.moviepedia.movie.entity.Movie;
+import com.supershy.moviepedia.movie.repository.MovieRepository;
 import com.supershy.moviepedia.review.entity.Review;
 import com.supershy.moviepedia.review.repository.ReviewRepository;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -27,14 +31,18 @@ public class MemberServiceImpl implements MemberService {
     private final JwtTokenProvider jwtTokenProvider;
     private final AuthenticationManager authenticationManager;
     private final ReviewRepository reviewRepository;
+    private final MovieRepository movieRepository;
+    private final LikeRepository likeRepository;
 
     public MemberServiceImpl(MemberRepository memberRepository, PasswordEncoder passwordEncoder,
-                             JwtTokenProvider jwtTokenProvider, AuthenticationManager authenticationManager, ReviewRepository reviewRepository) {
+                             JwtTokenProvider jwtTokenProvider, AuthenticationManager authenticationManager, ReviewRepository reviewRepository, MovieRepository movieRepository, LikeRepository likeRepository) {
         this.memberRepository = memberRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtTokenProvider = jwtTokenProvider;
         this.authenticationManager = authenticationManager;
         this.reviewRepository = reviewRepository;
+        this.movieRepository = movieRepository;
+        this.likeRepository = likeRepository;
     }
 
 
@@ -73,6 +81,14 @@ public class MemberServiceImpl implements MemberService {
                 .map(MyPageReviewDto::fromEntity)
                 .collect(Collectors.toList());
         return new MyPageDto(member.getNickname(), reviewDtoList);
+    }
+
+    @Override
+    public List<MyMovieDto> getMyMovie(Member member) {
+        List<Movie> movieList = likeRepository.findAllByMemberId(member.getMemberId());
+        return movieList.stream()
+                .map(MyMovieDto::fromEntity)
+                .toList();
     }
 
 }
