@@ -15,9 +15,7 @@ body {
 }
 
 .navbar .logo {
-    font-size: 28px;
-    font-weight: bold;
-    color: #FF0050;
+    flex: 0 0 auto;
 }
 
 /* 로고 이미지 스타일 */
@@ -26,17 +24,28 @@ body {
     height: auto;  /* 높이는 자동으로 조정하여 비율을 유지 */
 }
 
+
+/* 사용자 이름 스타일 */
+.user-nickname {
+    font-weight: bold;
+    color: #333;
+    margin-right: 10px;
+    padding: 5px 10px;
+    background-color: #f0f0f0;
+    border-radius: 20px;
+}
+
 .navbar .search-bar {
     display: flex;
     align-items: center;
     flex-grow: 1;
-    justify-content: flex-end;
-    gap: 10px;
+    justify-content: center;
+    margin: 0 20px;
 }
 
 .search-bar input[type="text"] {
     padding: 10px;
-    width: 200px;
+    width: 300px;
     border: 1px solid #ccc;
     border-radius: 4px;
 }
@@ -48,11 +57,19 @@ body {
     padding: 10px 20px;
     border-radius: 4px;
     cursor: pointer;
-    margin-right: 10px;
+    margin-left: 10px;
 }
 
 .navbar .user-options {
     display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.navbar .user-options span {
+    margin-right: 10px;
+    font-weight: bold;
+    color: #FF0050;
 }
 
 .navbar .user-options a {
@@ -62,13 +79,13 @@ body {
     padding: 8px 16px;
     border-radius: 4px;
     background-color: white;
-    border: 1px solid white;
+    border: 1px solid #ccc;
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .navbar .user-options a:hover {
     background-color: #f0f0f0;
-    color: black;
+    color: #FF0050;
 }
 
 /* 박스오피스 순위 스타일 */
@@ -309,6 +326,17 @@ button[type="submit"]:hover {
 
 .login-footer a:hover {
     text-decoration: underline;
+}
+
+/* 로그아웃 링크 특별 스타일 */
+#logout-link {
+    color: #FF0050;
+    border: 1px solid #FF0050;
+}
+
+#logout-link:hover {
+    background-color: #FF0050;
+    color: white;
 }
 
 /* 영화 상세 정보 섹션 */
@@ -617,4 +645,21 @@ button[type="submit"]:hover {
 /* 하트 아이콘 스타일 */
 #heart-icon {
     margin-right: 8px; /* 하트 아이콘과 텍스트 간격 */
+}
+
+
+#mypage-link {
+    text-decoration: none;
+    color: black;
+    font-size: 16px;
+    padding: 8px 16px;
+    border-radius: 4px;
+    background-color: white;
+    border: 1px solid #ccc;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+#mypage-link:hover {
+    background-color: #f0f0f0;
+    color: #FF0050;
 }

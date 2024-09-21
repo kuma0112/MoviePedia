@@ -24,8 +24,11 @@
         <button>검색</button>
     </div>
     <div class="user-options">
-        <a href="/pages/register">회원가입</a>
-        <a href="/pages/login">로그인</a>
+        <span id="user-nickname" style="display: none;"></span>
+        <a href="/pages/register" id="register-link">회원가입</a>
+        <a href="/pages/login" id="login-link">로그인</a>
+        <a href="/pages/mypage" id="mypage-link" style="display: none;">마이페이지</a>
+        <a href="#" id="logout-link" style="display: none;">로그아웃</a>
     </div>
 </nav>
 
@@ -225,6 +228,51 @@
         });
     });
 
+    document.addEventListener("DOMContentLoaded", function () {
+        checkLoginStatus();
+
+        // 로그아웃 기능 추가
+        document.getElementById('logout-link').addEventListener('click', function(e) {
+            e.preventDefault();
+            logout();
+        });
+
+        function checkLoginStatus() {
+            const token = localStorage.getItem('token');
+            const nickname = localStorage.getItem('nickname');
+            updateUI(nickname);
+        }
+
+        function updateUI(nickname) {
+            const userNicknameElement = document.getElementById('user-nickname');
+            const registerLink = document.getElementById('register-link');
+            const loginLink = document.getElementById('login-link');
+            const logoutLink = document.getElementById('logout-link');
+            const mypageLink = document.getElementById('mypage-link');
+
+            if (nickname) {
+                userNicknameElement.textContent = nickname;
+                userNicknameElement.style.display = 'inline';
+                registerLink.style.display = 'none';
+                loginLink.style.display = 'none';
+                logoutLink.style.display = 'inline';
+                mypageLink.style.display = 'inline-block';
+            } else {
+                userNicknameElement.style.display = 'none';
+                registerLink.style.display = 'inline';
+                loginLink.style.display = 'inline';
+                logoutLink.style.display = 'none';
+                mypageLink.style.display = 'none';
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('nickname');
+            updateUI(null);
+            window.location.href = '/';
+        }
+    });
 
 </script>
 
