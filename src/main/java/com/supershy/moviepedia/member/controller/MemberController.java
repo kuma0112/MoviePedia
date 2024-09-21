@@ -3,14 +3,15 @@ package com.supershy.moviepedia.member.controller;
 import com.supershy.moviepedia.auth.dto.LoginRequestDto;
 import com.supershy.moviepedia.member.dto.MemberDto;
 import com.supershy.moviepedia.member.dto.MessageResponse;
+import com.supershy.moviepedia.member.dto.MyPageDto;
+import com.supershy.moviepedia.member.entity.Member;
 import com.supershy.moviepedia.member.service.MemberService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/members") // 기본 URL 설정
@@ -44,5 +45,11 @@ public class MemberController {
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
         }
+    }
+
+    @GetMapping("/mypage")
+    public ResponseEntity<?> getMyPage(@AuthenticationPrincipal(expression = "member") Member member) {
+        MyPageDto myPageDto = memberService.getMyPage(member);
+        return ResponseEntity.status(HttpStatus.OK).body(myPageDto);
     }
 }
