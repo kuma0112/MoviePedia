@@ -15,6 +15,9 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/members") // 기본 URL 설정
@@ -41,10 +44,13 @@ public class MemberController {
     @PostMapping("/login")
     public ResponseEntity<?> loginMember(@Valid @RequestBody LoginRequestDto loginRequestDto) {
         try {
-            String token = memberService.loginMember(loginRequestDto);
+            Map<String, String> loginResponse = memberService.loginMember(loginRequestDto);
+            String token = loginResponse.get("token");
+            String nickname = loginResponse.get("nickname");
+
             return ResponseEntity.ok()
                     .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
-                    .body(new MessageResponse("로그인에 성공했습니다."));
+                    .body(Map.of("nickname", nickname));
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
         }

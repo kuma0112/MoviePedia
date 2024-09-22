@@ -24,7 +24,7 @@
         <button>검색</button>
     </div>
     <div class="user-options">
-        <a href="/pages/login">로그인</a>
+        <a href="/pages/register">회원가입</a>
     </div>
 </div>
 
@@ -49,50 +49,50 @@
 </div>
 
 <script>
-    document.getElementById('login-form').addEventListener('submit', async function(event) {
-        event.preventDefault(); // 폼의 기본 제출 동작 방지
+    document.addEventListener('DOMContentLoaded', function() {
 
-        // 입력 필드 값 가져오기
-        const email = document.getElementById('email').value;
-        const password = document.getElementById('password').value;
+        document.getElementById('login-form').addEventListener('submit', async function(event) {
+            event.preventDefault();
 
-        // 유효성 검사
-        if (!email || !password) {
-            alert('이메일과 비밀번호를 모두 입력해주세요.');
-            return;
-        }
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
 
-        try {
-            // 로그인 API 요청
-            const response = await fetch('/api/members/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ email, password })
-            });
-
-            if (response.ok) {
-                // 성공적인 응답일 경우 JWT 토큰을 헤더에서 가져오기
-                const token = response.headers.get('Authorization');
-
-                if (token) {
-                    // JWT 토큰을 로컬 스토리지에 저장 (또는 세션 스토리지)
-                    localStorage.setItem('jwtToken', token);
-                    alert('로그인에 성공했습니다!');
-                    // 로그인 성공 시 홈 또는 다른 페이지로 리디렉션
-                    window.location.href = '/'; // 원하는 리디렉션 경로 설정
-                } else {
-                    alert('토큰이 전달되지 않았습니다.');
-                }
-            } else {
-                const errorMessage = await response.text();
-                alert(`로그인 실패: \${errorMessage}`);
+            if (!email || !password) {
+                alert('이메일과 비밀번호를 모두 입력해주세요.');
+                return;
             }
-        } catch (error) {
-            console.error('Error:', error);
-            alert('로그인 중 문제가 발생했습니다.');
-        }
+
+            try {
+                const response = await fetch('/api/members/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+
+                if (response.ok) {
+                    const token = response.headers.get('Authorization');
+                    const data = await response.json();
+                    const nickname = data.nickname;
+
+                    if (token && nickname) {
+                        localStorage.setItem('token', token);
+                        localStorage.setItem('nickname', nickname);
+                        alert('로그인에 성공했습니다!');
+                        window.location.href = '/';
+                    } else {
+                        alert('토큰 또는 닉네임이 전달되지 않았습니다.');
+                    }
+                } else {
+                    const errorMessage = await response.text();
+                    alert(`로그인 실패: ${errorMessage}`);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('로그인 중 문제가 발생했습니다.');
+            }
+        });
     });
 </script>
 

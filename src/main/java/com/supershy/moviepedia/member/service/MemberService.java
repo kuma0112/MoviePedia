@@ -7,10 +7,11 @@ import com.supershy.moviepedia.member.dto.MyPageDto;
 import com.supershy.moviepedia.member.entity.Member;
 
 import java.util.List;
+import java.util.Map;
 
 public interface MemberService {
     void registerMember(MemberDto memberDto);
-    String loginMember(LoginRequestDto loginRequestDto);
+    Map<String, String> loginMember(LoginRequestDto loginRequestDto);
     MyPageDto getMyPage(Member member);
     List<MyMovieDto> getMyMovie(Member member);
 }
