@@ -26,7 +26,6 @@ import java.util.stream.Collectors;
 public class LikeServiceImpl implements LikeService {
 
     private final LikeRepository likeRepository;
-    private final MemberRepository memberRepository;
     private final MovieRepository movieRepository;
 
     @Override
