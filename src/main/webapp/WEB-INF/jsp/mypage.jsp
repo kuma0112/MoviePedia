@@ -25,7 +25,9 @@
         <button>검색</button>
     </div>
     <div class="user-options">
-        <a href="/pages/login">로그인</a>
+        <span id="user-nickname" style="display: none;"></span>
+        <a href="/pages/login" id="login-link">로그인</a>
+        <a href="#" id="logout-link" style="display: none;">로그아웃</a>
     </div>
 </nav>
 
@@ -104,6 +106,47 @@
     // 페이지가 로드될 때 getMyPageData 함수를 호출해서 데이터를 불러옴
     document.addEventListener('DOMContentLoaded', () => {
         getMyPageData();
+    });
+
+
+    document.addEventListener("DOMContentLoaded", function () {
+        checkLoginStatus();
+
+        // 로그아웃 기능 추가
+        document.getElementById('logout-link').addEventListener('click', function(e) {
+            e.preventDefault();
+            logout();
+        });
+
+        function checkLoginStatus() {
+            const token = localStorage.getItem('token');
+            const nickname = localStorage.getItem('nickname');
+            updateUI(nickname);
+        }
+
+        function updateUI(nickname) {
+            const userNicknameElement = document.getElementById('user-nickname');
+            const loginLink = document.getElementById('login-link');
+            const logoutLink = document.getElementById('logout-link');
+
+            if (nickname) {
+                userNicknameElement.textContent = nickname;
+                userNicknameElement.style.display = 'inline';
+                loginLink.style.display = 'none';
+                logoutLink.style.display = 'inline';
+            } else {
+                userNicknameElement.style.display = 'none';
+                loginLink.style.display = 'inline';
+                logoutLink.style.display = 'none';
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('nickname');
+            updateUI(null);
+            window.location.href = '/';
+        }
     });
 </script>
 
