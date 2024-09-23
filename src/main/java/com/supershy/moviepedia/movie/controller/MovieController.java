@@ -34,4 +34,10 @@ public class MovieController {
         MovieListDto upcomingMovies = movieService.getUpcomingMovies(page, size);
         return ResponseEntity.status(HttpStatus.OK).body(upcomingMovies);  // 상영 예정 영화 리스트와 총 개수를 반환
     }
+
+    @GetMapping("/searches")
+    public ResponseEntity<?> getMoviesBySearchWord(@RequestParam(name = "query") String query) {
+        MovieListDto searchMovies = movieService.getMoviesBySearchWord(query);
+        return ResponseEntity.status(HttpStatus.OK).body(searchMovies);
+    }
 }

@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.Optional;
 
-public interface MovieRepository extends CrudRepository<Movie, Long> {
+public interface MovieRepository extends CrudRepository<Movie, Long>, QueryDslMovieRepository {
 
     @Query(value = "SELECT DISTINCT m FROM Movie m LEFT JOIN FETCH m.genre LEFT JOIN FETCH m.reviews",
            countQuery = "SELECT COUNT(m) FROM Movie m")
