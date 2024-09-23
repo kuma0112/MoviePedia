@@ -1,9 +1,14 @@
 package com.supershy.moviepedia.movie.entity;
+
 import com.supershy.moviepedia.genre.entity.Genre;
+import com.supershy.moviepedia.review.entity.Review;;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.List;
+
 import lombok.Builder;
 
 
@@ -16,7 +21,7 @@ public class Movie {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long movieId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "genre_id")
     private Genre genre;
 
@@ -28,8 +33,11 @@ public class Movie {
     private LocalDateTime releaseDate;
 
     @Enumerated(EnumType.STRING)  
-    @Column(columnDefinition = "ENUM('NOW_SHOWING', 'UPCOMING')")//jpa에는 string으로 mysql에선 enum으로 인식함
+    @Column(columnDefinition = "ENUM('NOW_SHOWING', 'UPCOMING')")
     private ReleaseState releaseState;
+
+    @OneToMany(mappedBy = "movie", fetch = FetchType.LAZY)  // Review와의 관계 설정
+    private List<Review> reviews;
 
     @Builder
     public Movie(Genre genre, String title, String description, String director, Double reservationRate, String imageUrl, LocalDateTime releaseDate, ReleaseState releaseState) {
@@ -40,7 +48,7 @@ public class Movie {
         this.reservationRate = reservationRate;
         this.imageUrl = imageUrl;
         this.releaseDate = releaseDate;
-        this.releaseState = releaseState; 
+        this.releaseState = releaseState;
     }
 }
 

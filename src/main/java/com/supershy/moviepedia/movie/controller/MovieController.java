@@ -1,18 +1,15 @@
 package com.supershy.moviepedia.movie.controller;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import com.supershy.moviepedia.movie.dto.MovieListDto;
+import com.supershy.moviepedia.movie.service.MovieService;
+
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.supershy.moviepedia.movie.dto.MovieDto;
-import com.supershy.moviepedia.movie.service.MovieService;
-
-import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
@@ -21,15 +18,20 @@ public class MovieController {
 
     private final MovieService movieService;
 
-  
     @GetMapping("/rankings")
-    public ResponseEntity<?> getRanking(Pageable pageable) {
-        Page<MovieDto> movieRanking = movieService.getRanking(pageable);
-        return ResponseEntity.status(HttpStatus.OK).body(movieRanking);
+    public ResponseEntity<?> getRanking(
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "10") int size) {
+        MovieListDto movieRanking = movieService.getRanking(page, size);
+        return ResponseEntity.status(HttpStatus.OK).body(movieRanking);  // 영화 리스트와 총 개수를 반환
     }
 
-    @GetMapping("/searches")
-    public ResponseEntity<?> getMoviesBySearchWord(@RequestParam("query") String searchWord) {
-        return ResponseEntity.status(HttpStatus.OK).body(movieService.getMoviesBySearchWord(searchWord));
+
+    @GetMapping("/upcoming")
+    public ResponseEntity<?> getUpcomingMovies(
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "10") int size) {
+        MovieListDto upcomingMovies = movieService.getUpcomingMovies(page, size);
+        return ResponseEntity.status(HttpStatus.OK).body(upcomingMovies);  // 상영 예정 영화 리스트와 총 개수를 반환
     }
 }

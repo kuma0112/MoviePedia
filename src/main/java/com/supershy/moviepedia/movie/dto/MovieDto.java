@@ -1,43 +1,42 @@
 package com.supershy.moviepedia.movie.dto;
 
-import java.time.LocalDateTime;
-
-import com.supershy.moviepedia.genre.entity.Genre;
 import com.supershy.moviepedia.movie.entity.Movie;
-import com.supershy.moviepedia.movie.entity.ReleaseState;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 
+import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.util.List;
+
 @Getter
 @Builder
 @AllArgsConstructor
 @ToString
-public class MovieDto {
+public class MovieDto implements Serializable {
 
     private Long movieId;
-    private Genre genre;
     private String title;
+    private String genre;
     private String description;
     private String director;
     private Double reservationRate;
     private String imageUrl;
     private LocalDateTime releaseDate;
-    private ReleaseState releaseState;  
+    private List<ReviewList> reviewList;  
 
-    public static MovieDto fromEntity(Movie movie) {
+    public static MovieDto fromEntity(Movie movie, List<ReviewList> reviewList) {
         return MovieDto.builder()
                 .movieId(movie.getMovieId())
-                .genre(movie.getGenre())
+                .genre(movie.getGenre().getGenreName())  
                 .title(movie.getTitle())
                 .description(movie.getDescription())
                 .director(movie.getDirector())
                 .reservationRate(movie.getReservationRate())
                 .imageUrl(movie.getImageUrl())
                 .releaseDate(movie.getReleaseDate())
-                .releaseState(movie.getReleaseState())
+                .reviewList(reviewList)  
                 .build();
     }
 }

@@ -1,14 +1,14 @@
 package com.supershy.moviepedia.member.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Getter
 @NoArgsConstructor
+@Builder
+@AllArgsConstructor
 public class Member {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long memberId;
@@ -21,5 +21,4 @@ public class Member {
 
     @Column(nullable = false)
     private String password;
-
 }

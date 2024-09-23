@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <!--defaults.xml 기본 설정. console-appender.xml 콘솔에 로그를 출력하는 설정 -->
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+    <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
+
+    <!-- 로그 출력 위치 지정. ConsoleAppender는 터미널에 로그 출력하는 역할-->
+    <appender name="MY_CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <!-- 로그 출력 형식 지정
+             %d{yyyy-MM-dd HH:mm:ss} 로그 발생 시간
+             %-5level 로그 레벨을 다섯자리로 출력
+             %logger{20} 로그를 기록하는 클래스나 패키지 이름을 20자로 출력
+             %msg 로그 메시지 출력
+             {blue} 파란색으로 출력 -->
+            <pattern>%clr(%d{yyyy-MM-dd HH:mm:ss} %-5level %logger{20} - %msg%n){blue}</pattern>
+        </encoder>
+    </appender>
+
+    <!-- 파일에다 로그를 지정하는 설정. RollingFileAppender는 일정 시간이 지나면 새로운 파일로 롤링(회전)하는 역할 -->
+    <appender name="ROLLING_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- 파일 지정 경로 -->
+        <file>logs/myapp.log</file>
+        <!-- 롤링 policy는 시간을 기준으로 삼겠다. 매일 새로운 로그 파일이 생김 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- 로그 이름 설정 방식-->
+            <fileNamePattern>logs/myapp.%d{yyyy-MM-dd}.log</fileNamePattern>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} %-5level %logger{20} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- root는 최상위 로거. 지정되어 있지 않다면 모두 이 root 로거를 지나간다. -->
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+    </root>
+    <!-- 리뷰 패키지에 대해서는 파일로만 출력하겠다.
+     additivity는 상위 로거, 즉 root 로거로 전파하겠다는 뜻 -->
+    <logger name="com.supershy.moviepedia.review" level="INFO" additivity="true">
+        <appender-ref ref="ROLLING_FILE"/>
+    </logger>
+</configuration>
