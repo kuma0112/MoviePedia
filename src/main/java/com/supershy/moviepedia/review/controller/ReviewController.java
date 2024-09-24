@@ -30,9 +30,6 @@ public class ReviewController {
     
     public ResponseEntity<String> createReview(@PathVariable(name = "movieId") Long movieId, @RequestBody ReviewDto reviewDto,
                                                @AuthenticationPrincipal(expression = "member") Member member) {
-        if (member == null) {
-            throw new IllegalArgumentException("로그인된 사용자가 없습니다.");
-        }
         reviewService.createReview(member, movieId, reviewDto);
         
         return ResponseEntity.ok("리뷰가 성공적으로 생성되었습니다.");
