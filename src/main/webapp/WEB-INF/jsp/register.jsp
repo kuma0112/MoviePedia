@@ -19,10 +19,6 @@
             <img src="${pageContext.request.contextPath}/images/logo.png" alt="MoviePedia 로고">
         </a>
     </div>
-    <div class="search-bar">
-        <input type="text" placeholder="콘텐츠, 인물, 컬렉션 검색">
-        <button>검색</button>
-    </div>
     <div class="user-options">
         <a href="/pages/login">로그인</a>
     </div>
