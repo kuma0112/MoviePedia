@@ -3,10 +3,16 @@ package com.supershy.moviepedia.member.dto;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import jakarta.validation.constraints.Pattern;
+import lombok.ToString;
 
 @Getter
+@Builder
+@AllArgsConstructor
+@ToString
 public class MemberDto {
     @NotBlank(message = "닉네임을 입력해주세요.")
     @Size(min = 1, max = 10, message = "닉네임은 1자 이상 10자 이하로 입력해주세요.")
