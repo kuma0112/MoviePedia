@@ -44,4 +44,9 @@ public class PageController {
     public String getMyMovie() {
         return "mymovie";
     }
+
+    @GetMapping("/pages/search")
+    public String getSearchMovie() {
+        return "search";
+    }
 }

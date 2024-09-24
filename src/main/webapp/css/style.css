@@ -809,4 +809,55 @@ button[type="submit"]:hover {
     margin-bottom: 10px;
 }
 
+/* 검색 결과 섹션 스타일 */
+#searchResultsContainer {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr); /* 5개 열로 배치 */
+    gap: 20px; /* 카드 간격 */
+    justify-items: center;
+    padding: 20px;
+}
+
+#searchResultsContainer .search-movie-card {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    text-align: center;
+    width: 200px; /* 카드의 폭 설정 */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+#searchResultsContainer .search-movie-card:hover {
+    transform: scale(1.05); /* 마우스를 올렸을 때 카드 확대 */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+#searchResultsContainer .search-movie-card img {
+    width: 100%;
+    border-radius: 8px;
+}
+
+#searchResultsContainer .search-title {
+    font-size: 16px;
+    margin-top: 10px;
+    color: #333;
+    font-weight: bold;
+}
+
+#searchResultsContainer .search-director,
+#searchResultsContainer .search-genre {
+    font-size: 14px;
+    color: #777;
+    margin-top: 5px;
+}
+
+.search-results h2 {
+    margin-top: 40px;
+    margin-bottom: 20px;
+    font-size: 23px; /* 글자 크기 줄임 */
+    font-weight: bold;
+    margin-left: 40px;
+}
+
 
