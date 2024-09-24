@@ -26,8 +26,14 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(new MessageResponse(errors.toString()));
     }
 
-    @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<MessageResponse> handleRuntimeException(RuntimeException ex) {
+    @ExceptionHandler({IllegalArgumentException.class, InvalidCredentialsException.class,
+            MemberNotFoundException.class, RegistrationException.class})
+    public ResponseEntity<MessageResponse> handleBadRequestExceptions(Exception ex) {
+        return ResponseEntity.badRequest().body(new MessageResponse(ex.getMessage()));
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<MessageResponse> handleRuntimeException(Exception ex) {
         return ResponseEntity.badRequest().body(new MessageResponse(ex.getMessage()));
     }
 }

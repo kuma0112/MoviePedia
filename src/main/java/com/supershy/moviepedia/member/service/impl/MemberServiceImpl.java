@@ -4,6 +4,7 @@ import com.supershy.moviepedia.auth.dto.LoginRequestDto;
 import com.supershy.moviepedia.auth.utils.JwtTokenProvider;
 import com.supershy.moviepedia.common.exception.InvalidCredentialsException;
 import com.supershy.moviepedia.common.exception.MemberNotFoundException;
+import com.supershy.moviepedia.common.exception.RegistrationException;
 import com.supershy.moviepedia.like.repository.LikeRepository;
 import com.supershy.moviepedia.member.dto.MemberDto;
 import com.supershy.moviepedia.member.dto.MyMovieDto;
@@ -53,9 +54,18 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public void registerMember(MemberDto memberDto) {
 
+        // 이메일 중복 체크
+        if (memberRepository.existsByEmail(memberDto.getEmail())) {
+            throw new RegistrationException("이미 사용 중인 이메일입니다.");
+        }
+
+        // 닉네임 중복 체크
+        if (memberRepository.existsByNickname(memberDto.getNickname())) {
+            throw new RegistrationException("이미 사용 중인 닉네임입니다.");
+        }
+
         // BCrypt를 사용하여 비밀번호 인코딩
         String encodedPassword = passwordEncoder.encode(memberDto.getPassword());
-
         // Member 객체 생성
         Member member = Member.builder()
                 .email(memberDto.getEmail())
