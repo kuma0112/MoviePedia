@@ -16,6 +16,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
+import com.supershy.moviepedia.movie.MovieFixture;
 import com.supershy.moviepedia.movie.dto.MovieDto;
 import com.supershy.moviepedia.movie.dto.MovieListDto;
 import com.supershy.moviepedia.movie.entity.Movie;

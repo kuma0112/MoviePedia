@@ -3,13 +3,13 @@ package com.supershy.moviepedia.movie.repository;
 import com.supershy.moviepedia.movie.entity.Movie;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
 import java.util.Optional;
 
-public interface MovieRepository extends CrudRepository<Movie, Long>, QueryDslMovieRepository {
+public interface MovieRepository extends JpaRepository<Movie, Long>, QueryDslMovieRepository {
 
     @Query(value = "SELECT DISTINCT m FROM Movie m LEFT JOIN FETCH m.genre LEFT JOIN FETCH m.reviews",
            countQuery = "SELECT COUNT(m) FROM Movie m")
@@ -17,7 +17,6 @@ public interface MovieRepository extends CrudRepository<Movie, Long>, QueryDslMo
 
     @Query(value = "SELECT DISTINCT m FROM Movie m LEFT JOIN FETCH m.genre LEFT JOIN FETCH m.reviews r LEFT JOIN FETCH r.member WHERE m.movieId = :movieId")
     Optional<Movie> findById(@Param("movieId") Long movieId);
-
 
     @Query(value = "SELECT DISTINCT m FROM Movie m LEFT JOIN FETCH m.genre LEFT JOIN FETCH m.reviews r LEFT JOIN FETCH r.member WHERE m.releaseState = 'UPCOMING'",
            countQuery = "SELECT COUNT(m) FROM Movie m WHERE m.releaseState = 'UPCOMING'")

@@ -1,7 +1,7 @@
 package com.supershy.moviepedia.movie.entity;
 
 import com.supershy.moviepedia.genre.entity.Genre;
-import com.supershy.moviepedia.review.entity.Review;;
+import com.supershy.moviepedia.review.entity.Review;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
