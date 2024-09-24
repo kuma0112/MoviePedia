@@ -102,22 +102,26 @@
             },
             body: JSON.stringify(signupData),
         })
-            .then(response => {
-                if (response.ok) {
-                    return response.json(); // 응답이 JSON이면 파싱
+            .then(response => response.json())
+            .then(data => {
+                if (data.message) {
+                    if (data.message.includes("이미 사용 중인 이메일입니다")) {
+                        alert("이미 사용 중인 이메일입니다. 다른 이메일을 사용해 주세요.");
+                    } else if (data.message.includes("이미 사용 중인 닉네임입니다")) {
+                        alert("이미 사용 중인 닉네임입니다. 다른 닉네임을 사용해 주세요.");
+                    } else if (data.message === "회원가입이 성공적으로 이루어졌습니다.") {
+                        alert(data.message);
+                        window.location.href = '/pages/login';
+                    } else {
+                        alert(data.message);
+                    }
                 } else {
-                    // 성공이 아닌 상태 코드 처리 (예: 400, 500 등)
-                    throw new Error('서버 오류 발생: 상태 코드 ' + response.status);
+                    throw new Error('알 수 없는 응답');
                 }
             })
-            .then(data => {
-                // 성공적인 응답 처리
-                alert('회원가입이 성공적으로 완료되었습니다.');
-                window.location.href = '/pages/login'; // 로그인 페이지로 이동
-            })
             .catch(error => {
-                // 에러 처리 (예: 상태 코드가 400, 500일 경우)
-                alert('회원가입에 실패했습니다: ' + error.message);
+                console.error('Error:', error);
+                alert('회원가입에 실패했습니다. 다시 시도해 주세요.');
             });
     });
 
