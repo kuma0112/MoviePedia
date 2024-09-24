@@ -45,7 +45,7 @@
     // 서버에서 내가 좋아요한 영화 리스트 데이터를 받아오는 함수
     async function getLikedMovies() {
         try {
-            const token = localStorage.getItem("jwtToken");
+            const token = localStorage.getItem("token");
 
             const response = await fetch('/api/members/mymovie', {
                 method: 'GET',

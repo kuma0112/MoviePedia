@@ -56,7 +56,7 @@
     // 마이 페이지 데이터를 받아오는 함수
     async function getMyPageData() {
         try {
-            const token = localStorage.getItem("jwtToken");
+            const token = localStorage.getItem("token");
 
             const response = await fetch('/api/members/mypage', {
                 method: 'GET',

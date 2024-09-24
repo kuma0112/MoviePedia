@@ -160,7 +160,7 @@
             const reviewContent = document.getElementById("review-content").value;
             if (!reviewContent.trim()) return alert("리뷰 내용을 입력하세요.");
 
-            const token = localStorage.getItem("jwtToken");
+            const token = localStorage.getItem("token");
 
             const response = await fetch(`/api/movies/${movieId}/reviews`, {
                 method: 'POST',
@@ -195,7 +195,7 @@
     document.addEventListener("DOMContentLoaded", function() {
         const likeBtn = document.getElementById("like-btn");
         const movieId = ${movie.movieId}; // movieId 변수 추가
-        const token = localStorage.getItem("jwtToken");
+        const token = localStorage.getItem("token");
 
         // 좋아요 버튼 클릭 이벤트
         likeBtn.addEventListener("click", async function() {

@@ -78,7 +78,7 @@ class MovieServiceImplTest {
             Member member1 = mock(Member.class); // Member 객체를 Mock으로 생성
             Member member2 = mock(Member.class); // Member 객체를 Mock으로 생성
 
-            // Membe
+            // Member
             when(member1.getNickname()).thenReturn("nickname1");
             when(member2.getNickname()).thenReturn("nickname2");
 
@@ -111,6 +111,62 @@ class MovieServiceImplTest {
         // then
         assertAll(
             () -> assertThat(result.getMovieList()).hasSize(movieList.size()),
+            () -> assertThat(result.getMovieList()).usingRecursiveComparison().isEqualTo(expectedMovieListDto.getMovieList())
+        );
+    }
+    
+    
+    @Test
+    void getUpcomingTest() {
+        // given
+        int page = 0;
+        int size = 5;
+
+        Pageable pageable = PageRequest.of(page, size);
+
+        // Mock 개봉 예정 영화 생성 
+        Movie upcomingMovie1 = mock(Movie.class);
+        Movie upcomingMovie2 = mock(Movie.class);
+
+        List<Movie> upcomingMovieList = List.of(upcomingMovie1, upcomingMovie2);
+
+        Page<Movie> upcomingMoviePage = new PageImpl<>(upcomingMovieList, pageable, upcomingMovieList.size());
+        when(movieRepository.findUpcomingMovies(pageable)).thenReturn(upcomingMoviePage);
+
+        // Mock 장르 설정
+        Genre genre1 = mock(Genre.class);
+        Genre genre2 = mock(Genre.class);
+
+        when(genre1.getGenreName()).thenReturn("Sci-Fi");
+        when(genre2.getGenreName()).thenReturn("Thriller");
+
+        when(upcomingMovie1.getGenre()).thenReturn(genre1);
+        when(upcomingMovie2.getGenre()).thenReturn(genre2);
+
+        // 개봉 예정 영화는 리뷰가x
+        when(upcomingMovie1.getReviews()).thenReturn(List.of());
+        when(upcomingMovie2.getReviews()).thenReturn(List.of());
+
+        List<MovieDto> expectedMovieDtoList = upcomingMovieList.stream()
+            .map(movie -> {
+                List<ReviewList> reviewList = movie.getReviews().stream()
+                    .map(review -> ReviewList.builder()
+                        .content(review.getContent())
+                        .nickname(review.getMember().getNickname())
+                        .build())
+                    .toList();
+                return MovieDto.fromEntity(movie, reviewList);
+            })
+            .toList();
+
+        MovieListDto expectedMovieListDto = new MovieListDto(expectedMovieDtoList, upcomingMovieList.size());
+
+        // when
+        MovieListDto result = movieService.getUpcomingMovies(page, size);
+
+        // then
+        assertAll(
+            () -> assertThat(result.getMovieList()).hasSize(upcomingMovieList.size()),
             () -> assertThat(result.getMovieList()).usingRecursiveComparison().isEqualTo(expectedMovieListDto.getMovieList())
         );
     }
