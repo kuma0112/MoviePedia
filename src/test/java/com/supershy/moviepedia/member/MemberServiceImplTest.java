@@ -79,30 +79,12 @@ public class MemberServiceImplTest {
                 .password("password123")
                 .build();
 
-        when(memberRepository.existsByEmail(memberDto.getNickname())).thenReturn(true);
+        when(memberRepository.existsByNickname(memberDto.getNickname())).thenReturn(true);
 
         // when then
         assertThrows(RegistrationException.class, ()
                 -> memberServiceImpl.registerMember(memberDto));
     }
-
-    @Test
-    @DisplayName("중복된 이름 회원 등록 시 예외가 발생하는가?")
-    void registerMember_DuplicateNickname_Fail() {
-        // given
-        MemberDto memberDto = MemberDto.builder()
-                .nickname("user1")
-                .email("test@gmail.com")
-                .password("password123")
-                .build();
-
-        when(memberRepository.existsByEmail(memberDto.getEmail())).thenReturn(true);
-
-        // when then
-        assertThrows(RegistrationException.class, ()
-                -> memberServiceImpl.registerMember(memberDto));
-    }
-
 
     @Test
     @DisplayName("중복된 이메일 회원 등록 시 예외가 발생하는가?")
