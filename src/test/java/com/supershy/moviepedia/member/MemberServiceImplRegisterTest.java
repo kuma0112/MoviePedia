@@ -2,6 +2,7 @@ package com.supershy.moviepedia.member;
 
 import com.supershy.moviepedia.auth.dto.LoginRequestDto;
 import com.supershy.moviepedia.auth.utils.JwtTokenProvider;
+import com.supershy.moviepedia.common.exception.RegistrationException;
 import com.supershy.moviepedia.member.dto.MemberDto;
 import com.supershy.moviepedia.member.entity.Member;
 import com.supershy.moviepedia.member.repository.MemberRepository;
@@ -9,6 +10,7 @@ import com.supershy.moviepedia.member.service.impl.MemberServiceImpl;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -69,22 +71,55 @@ public class MemberServiceImplRegisterTest {
         verify(passwordEncoder, times(1)).encode(memberDto.getPassword());
     }
 
-
     @Test
-    @DisplayName("중복된 이메일 회원 등록 시 예외가 발생하는가?")
-    void registerMember_Fail() {
+    @DisplayName("중복된 닉네임 회원 등록 시 예외가 발생하는가?")
+    void registerMemberNickname_Fail() {
         // given
         MemberDto memberDto = MemberDto.builder()
                 .nickname("test_nickname")
-                .email("test@gmail.com")
-                .password("password")
+                .email("user1@gmail.com")
+                .password("password123")
                 .build();
 
-        when(memberRepository.save(any(Member.class))).
-                thenThrow(DataIntegrityViolationException.class);
+        when(memberRepository.existsByEmail(memberDto.getNickname())).thenReturn(true);
 
         // when then
-        assertThrows(DataIntegrityViolationException.class, ()
+        assertThrows(RegistrationException.class, ()
+                -> memberServiceImpl.registerMember(memberDto));
+    }
+
+    @Test
+    @DisplayName("중복된 이름 회원 등록 시 예외가 발생하는가?")
+    void registerMember_DuplicateNickname_Fail() {
+        // given
+        MemberDto memberDto = MemberDto.builder()
+                .nickname("user1")
+                .email("test@gmail.com")
+                .password("password123")
+                .build();
+
+        when(memberRepository.existsByEmail(memberDto.getEmail())).thenReturn(true);
+
+        // when then
+        assertThrows(RegistrationException.class, ()
+                -> memberServiceImpl.registerMember(memberDto));
+    }
+
+
+    @Test
+    @DisplayName("중복된 이메일 회원 등록 시 예외가 발생하는가?")
+    void registerMember_DuplicateEmail_Fail() {
+        // given
+        MemberDto memberDto = MemberDto.builder()
+                .nickname("test_nickname")
+                .email("user1@gmail.com")
+                .password("password123")
+                .build();
+
+        when(memberRepository.existsByEmail(memberDto.getEmail())).thenReturn(true);
+
+        // when then
+        assertThrows(RegistrationException.class, ()
                 -> memberServiceImpl.registerMember(memberDto));
     }
 
