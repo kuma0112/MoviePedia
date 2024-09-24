@@ -663,3 +663,150 @@ button[type="submit"]:hover {
     background-color: #f0f0f0;
     color: #FF0050;
 }
+
+/* 마이 페이지 컨테이너 */
+.mypage-container {
+    max-width: 1020px; /* 1200px의 15% 감소한 값 */
+    margin: 30px auto;
+    padding: 20px;
+    background-color: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+.mypage-container h2 {
+    font-size: 28px;
+    color: #333;
+    margin-top: 50px;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.mypage-section-title {
+    font-size: 22px;
+    margin-top: 50px;
+    margin-bottom: 30px;
+    color: #555;
+    text-align: center;
+    font-weight: bold;
+}
+
+/* 영화 카드 스타일 */
+.mypage-movie-card {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.mypage-movie-card button {
+    background-color: #ff6b6b;
+    color: white;
+    padding: 15px;
+    font-size: 18px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.mypage-movie-card button:hover {
+    background-color: #e95d5d;
+}
+
+/* 마이페이지 리뷰 카드 스타일 */
+.mypage-review-card {
+    background-color: #f5f5f5;
+    padding: 20px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.mypage-review-card h4 {
+    font-size: 18px; /* 영화 제목을 작게 */
+    color: #666;
+    margin-bottom: 10px;
+    font-weight: normal; /* 볼드체 제거 */
+}
+
+.mypage-review-card p {
+    font-size: 20px; /* 리뷰 내용을 더 크게 */
+    color: #333;
+    line-height: 1.5;
+}
+
+/* 작성자를 오른쪽 하단에 배치 */
+.mypage-review-card .review-author {
+    font-size: 14px;
+    color: #999;
+    position: absolute;
+    bottom: 10px;
+    right: 20px;
+}
+
+/* 추가적인 hover 효과 */
+.mypage-review-card:hover {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    transform: translateY(-2px); /* 살짝 떠오르는 효과 */
+    transition: all 0.3s ease;
+}
+
+/* 마이 페이지 컨테이너 */
+.mypage-container {
+    max-width: 1200px;
+    margin: 30px auto;
+    padding: 20px;
+    background-color: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+/* 영화 카드 스타일 */
+.mymovie-movie-card {
+    display: inline-block;
+    width: 200px;
+    margin: 15px;
+    text-align: center;
+    background-color: #f5f5f5;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.mymovie-movie-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.mymovie-movie-card img {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.mymovie-rank {
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.mymovie-title {
+    font-size: 16px;
+    font-weight: 600;
+    margin: 10px 0;
+    color: #333;
+}
+
+.mymovie-reservationRate {
+    font-size: 14px;
+    color: #777;
+    margin-bottom: 10px;
+}
+
+
