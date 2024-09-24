@@ -1,4 +1,4 @@
-package com.supershy.moviepedia.movie;
+package com.supershy.moviepedia.movie.fixture;
 
 import com.supershy.moviepedia.genre.entity.Genre;
 import com.supershy.moviepedia.member.entity.Member;
