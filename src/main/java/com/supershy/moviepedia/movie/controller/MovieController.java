@@ -36,8 +36,10 @@ public class MovieController {
     }
 
     @GetMapping("/searches")
-    public ResponseEntity<?> getMoviesBySearchWord(@RequestParam(name = "query") String query) {
-        MovieListDto searchMovies = movieService.getMoviesBySearchWord(query);
+    public ResponseEntity<?> getMoviesBySearchWord(@RequestParam(name = "query") String query,
+                                                   @RequestParam(name = "page", defaultValue = "0") int page,
+                                                   @RequestParam(name = "size", defaultValue = "10") int size) {
+        MovieListDto searchMovies = movieService.getMoviesBySearchWord(query, page, size);
         return ResponseEntity.status(HttpStatus.OK).body(searchMovies);
     }
 }

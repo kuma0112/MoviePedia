@@ -59,8 +59,8 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public MovieListDto getMoviesBySearchWord(String query) {
-        List<Movie> movies = movieRepository.getMoviesBySearchWord(query);
+    public MovieListDto getMoviesBySearchWord(String query, int page, int size) {
+        List<Movie> movies = movieRepository.getMoviesBySearchWord(query, page, size);
 
         List<MovieDto> movieDtos = movies.stream()
                 .map(movie -> MovieDto.builder()

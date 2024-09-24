@@ -7,5 +7,5 @@ public interface MovieService {
     MovieListDto getRanking(int page, int size);
     MovieListDto getUpcomingMovies(int page, int size);
     MovieDto findMovieById(Long movieId);
-    MovieListDto getMoviesBySearchWord(String query);
+    MovieListDto getMoviesBySearchWord(String query, int page, int size);
 }

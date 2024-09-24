@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface QueryDslMovieRepository {
 
-    public List<Movie> getMoviesBySearchWord(String searchWord);
+    public List<Movie> getMoviesBySearchWord(String searchWord, int page, int size);
 }
