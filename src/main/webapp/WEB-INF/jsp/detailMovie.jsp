@@ -20,8 +20,8 @@
         </a>
     </div>
     <div class="search-bar">
-        <input type="text" placeholder="콘텐츠, 인물, 컬렉션 검색">
-        <button>검색</button>
+        <input type="text" id="searchQuery" placeholder="콘텐츠, 인물, 컬렉션 검색">
+        <button id="searchButton">검색</button>
     </div>
     <div class="user-options">
         <span id="user-nickname" style="display: none;"></span>
@@ -102,6 +102,18 @@
 <script>
     window.onload = function () {
         checkLikeState();
+
+        document.getElementById('searchButton').addEventListener('click', function () {
+            const query = document.getElementById('searchQuery').value;
+            const page = 0;  // 첫 페이지로 설정
+            const size = 10;  // 한 페이지에 10개의 결과 표시
+            if (query) {
+                // 검색 페이지로 이동
+                window.location.href = `/pages/search?query=\${query}&page=\${page}&size=\${size}`;
+            } else {
+                alert('검색어를 입력해주세요.');
+            }
+        });
     }
 
     document.addEventListener("DOMContentLoaded", function () {
