@@ -28,7 +28,6 @@ import java.util.stream.Collectors;
 public class ReviewServiceImpl implements ReviewService {
 
     private final ReviewRepository reviewRepository;
-    private final MemberRepository memberRepository;
     private final MovieRepository movieRepository;
 
     @Override
