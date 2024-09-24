@@ -100,6 +100,10 @@
 </div>
 
 <script>
+    window.onload = function () {
+        checkLikeState();
+    }
+
     document.addEventListener("DOMContentLoaded", function () {
         const reviewContainer = document.getElementById("review-cards-container");
         const loadMoreBtn = document.getElementById("load-more");
@@ -273,6 +277,41 @@
             window.location.href = '/';
         }
     });
+
+    // 좋아요 상태를 확인하는 함수
+    async function checkLikeState() {
+        const movieId = ${movie.movieId}; // movieId 변수 사용
+        const token = localStorage.getItem("token");
+
+        if (!token) {
+            console.log("로그인이 필요합니다.");
+            return;
+        }
+
+        // 좋아요 상태를 확인하는 API 호출
+        const response = await fetch(`/api/movies/\${movieId}/likes`, {
+            method: 'GET',
+            headers: {
+                'Authorization': token,
+            }
+        });
+
+        if (response.ok) {
+            const result = await response.text();
+
+            const likeBtn = document.getElementById("like-btn");
+
+            // 좋아요 상태에 따라 버튼 스타일을 변경
+            if (result === "좋아요한 영화입니다.") {
+                likeBtn.classList.add("liked");  // 좋아요 상태로 변경
+            } else if (result === "좋아요하지 않은 영화입니다.") {
+                likeBtn.classList.remove("liked");  // 기본 상태로 유지
+            }
+        } else {
+            console.error("좋아요 상태를 확인하는 중 오류 발생");
+        }
+    }
+
 
 </script>
 

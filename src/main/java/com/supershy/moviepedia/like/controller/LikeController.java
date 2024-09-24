@@ -26,5 +26,11 @@ public class LikeController {
                                             @AuthenticationPrincipal(expression = "member") Member member) {
         return ResponseEntity.status(HttpStatus.OK).body(likeService.getLikedMovies(page, size, member.getMemberId()));
     }
+
+    @GetMapping("/{movieId}/likes")
+    public ResponseEntity<?> getLike(@PathVariable("movieId") Long movieId,
+    @AuthenticationPrincipal(expression = "member") Member member) {
+        return ResponseEntity.status(HttpStatus.OK).body(likeService.getLike(member, movieId));
+    }
 }
 
