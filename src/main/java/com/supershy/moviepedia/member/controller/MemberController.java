@@ -17,8 +17,6 @@
     import java.util.List;
     import java.util.Map;
 
-    import java.util.Map;
-
     @RestController
     @RequestMapping("/api/members") // 기본 URL 설정
     public class MemberController {
@@ -32,30 +30,20 @@
         // 회원가입 요청 처리
         @PostMapping
         public ResponseEntity<?> registerMember(@Valid @RequestBody MemberDto memberDto) {
-            try {
-                memberService.registerMember(memberDto);
-                return ResponseEntity.ok(new MessageResponse("회원가입이 성공적으로 이루어졌습니다."));
-            } catch (IllegalArgumentException e) {
-                return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
-            } catch (Exception e) {
-                return ResponseEntity.internalServerError().body(new MessageResponse("회원가입 중 오류가 발생했습니다: " + e.getMessage()));
-            }
+            memberService.registerMember(memberDto);
+            return ResponseEntity.ok(new MessageResponse("회원가입이 성공적으로 이루어졌습니다."));
         }
 
         // 로그인 요청 처리
         @PostMapping("/login")
         public ResponseEntity<?> loginMember(@Valid @RequestBody LoginRequestDto loginRequestDto) {
-            try {
-                Map<String, String> loginResponse = memberService.loginMember(loginRequestDto);
-                String token = loginResponse.get("token");
-                String nickname = loginResponse.get("nickname");
+            Map<String, String> loginResponse = memberService.loginMember(loginRequestDto);
+            String token = loginResponse.get("token");
+            String nickname = loginResponse.get("nickname");
 
-                return ResponseEntity.ok()
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
-                        .body(Map.of("nickname", nickname));
-            } catch (RuntimeException e) {
-                return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
-            }
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                    .body(Map.of("nickname", nickname));
         }
 
         @GetMapping("/mypage")
