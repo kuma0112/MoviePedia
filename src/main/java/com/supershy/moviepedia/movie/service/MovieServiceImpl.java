@@ -57,7 +57,30 @@ public class MovieServiceImpl implements MovieService {
                 .collect(Collectors.toList());
         return MovieDto.fromEntity(movie, reviewList);
     }
-    
+
+    @Override
+    public MovieListDto getMoviesBySearchWord(String query, int page, int size) {
+        List<Movie> movies = movieRepository.getMoviesBySearchWord(query, page, size);
+
+        List<MovieDto> movieDtos = movies.stream()
+                .map(movie -> MovieDto.builder()
+                        .movieId(movie.getMovieId())
+                        .title(movie.getTitle())
+                        .director(movie.getDirector())
+                        .genre(movie.getGenre().getGenreName())
+                        .description(movie.getDescription())
+                        .releaseDate(movie.getReleaseDate())
+                        .imageUrl(movie.getImageUrl())
+                        .reservationRate(movie.getReservationRate())
+                        .build())
+                .collect(Collectors.toList());
+
+        return MovieListDto.builder()
+                .movieList(movieDtos)
+                .totalElements(movieDtos.size())
+                .build();
+    }
+
     @Override
     public MovieListDto getUpcomingMovies(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);

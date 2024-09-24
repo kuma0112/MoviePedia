@@ -1,13 +1,16 @@
 package com.supershy.moviepedia.movie.entity;
 
 import com.supershy.moviepedia.genre.entity.Genre;
-import com.supershy.moviepedia.review.entity.Review;
+import com.supershy.moviepedia.review.entity.Review;;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.List;
+
 import lombok.Builder;
+
 
 @Entity
 @Getter
@@ -48,3 +51,4 @@ public class Movie {
         this.releaseState = releaseState;
     }
 }
+

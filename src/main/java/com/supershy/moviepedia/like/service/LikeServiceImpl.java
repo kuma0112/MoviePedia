@@ -57,5 +57,15 @@ public class LikeServiceImpl implements LikeService {
                 .collect(Collectors.toList());
         return new LikedMovieListDto(likedMovieDtoList,(int) foundMovieList.getTotalElements());
     }
+
+    @Override
+    public String getLike(Member member, Long movieId) {
+        Long memberId = member.getMemberId();
+        if (likeRepository.existsByMember_MemberIdAndMovie_MovieId(memberId, movieId)) {
+            return "좋아요한 영화입니다.";
+        } else {
+            return "좋아요하지 않은 영화입니다..";
+        }
+    }
 }
 

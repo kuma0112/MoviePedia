@@ -8,4 +8,6 @@ public interface LikeService {
     String insertLike(Member member, Long movieId);
 
     LikedMovieListDto getLikedMovies(int page, int size, Long memberId);
+
+    String getLike(Member member, Long movieId);
 }
