@@ -12,7 +12,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @ToString
 public class ReviewList implements Serializable {
-
+    private Long movieId;
     private String content;
     private String nickname;
 }
