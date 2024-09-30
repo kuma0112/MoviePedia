@@ -1,10 +1,7 @@
 package com.supershy.moviepedia.movie.dto;
 
 import com.supershy.moviepedia.movie.entity.Movie;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -13,6 +10,7 @@ import java.util.List;
 @Getter
 @Builder
 @AllArgsConstructor
+@NoArgsConstructor
 @ToString
 public class MovieDto implements Serializable {
 
@@ -24,6 +22,7 @@ public class MovieDto implements Serializable {
     private Double reservationRate;
     private String imageUrl;
     private LocalDateTime releaseDate;
+    @Setter
     private List<ReviewList> reviewList;  
 
     public static MovieDto fromEntity(Movie movie, List<ReviewList> reviewList) {
@@ -39,4 +38,16 @@ public class MovieDto implements Serializable {
                 .reviewList(reviewList)  
                 .build();
     }
+
+    public MovieDto(Long movieId, String title, String genre, String description, String director, Double reservationRate, String imageUrl, LocalDateTime releaseDate) {
+        this.movieId = movieId;
+        this.title = title;
+        this.genre = genre;
+        this.description = description;
+        this.director = director;
+        this.reservationRate = reservationRate;
+        this.imageUrl = imageUrl;
+        this.releaseDate = releaseDate;
+    }
+
 }

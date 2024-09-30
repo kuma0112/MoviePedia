@@ -5,6 +5,7 @@ import com.supershy.moviepedia.movie.dto.MovieListDto;
 import com.supershy.moviepedia.movie.dto.ReviewList;
 import com.supershy.moviepedia.movie.entity.Movie;
 import com.supershy.moviepedia.movie.repository.MovieRepository;
+import com.supershy.moviepedia.review.repository.ReviewRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
@@ -14,7 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -23,27 +24,29 @@ import java.util.stream.Collectors;
 public class MovieServiceImpl implements MovieService {
 
     private final MovieRepository movieRepository;
+    private final ReviewRepository reviewRepository;
 
-    @Cacheable(value = "rankings", key = "T(java.time.LocalDateTime).now().toString()")
+    @Cacheable(value = "rankings", key = "#page + '-' + #size")
     @Override
     public MovieListDto getRanking(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<Movie> moviePage = movieRepository.findAllWithReviewsAndGenre(pageable);
 
-        List<MovieDto> movieDtoList = moviePage.stream()
-            .map(movie -> {
-                List<ReviewList> reviewList = movie.getReviews().stream()
-                    .map(review -> ReviewList.builder()
-                        .content(review.getContent())
-                        .nickname(review.getMember().getNickname())
-                        .build())
+        Page<MovieDto> movieDtos = movieRepository.findMovies(pageable);
+
+        List<Long> movieIds = movieDtos.stream()
+                .map(MovieDto::getMovieId)
+                .collect(Collectors.toList());
+
+        List<ReviewList> reviews = reviewRepository.findReviewsByMovieIds(movieIds);
+
+        movieDtos.forEach(movieDto -> {
+            List<ReviewList> movieReviews = reviews.stream()
+                    .filter(review -> review.getMovieId().equals(movieDto.getMovieId()))
                     .collect(Collectors.toList());
+            movieDto.setReviewList(movieReviews);
+        });
 
-                return MovieDto.fromEntity(movie, reviewList);
-            })
-            .collect(Collectors.toList());
-
-        return new MovieListDto(movieDtoList, (int) moviePage.getTotalElements());
+        return new MovieListDto(movieDtos.getContent(), (int) movieDtos.getTotalElements());
     }
 
     @Override
@@ -77,9 +80,9 @@ public class MovieServiceImpl implements MovieService {
 
         return MovieListDto.builder()
                 .movieList(movieDtos)
-                .totalElements(movieDtos.size())
                 .build();
     }
+
 
     @Override
     public MovieListDto getUpcomingMovies(int page, int size) {

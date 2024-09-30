@@ -765,6 +765,32 @@ button[type="submit"]:hover {
     border-radius: 8px;
 }
 
+/* 수정 및 삭제 버튼 스타일 */
+.mypage-modify-button, .mypage-delete-button {
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    padding: 8px 12px;
+    cursor: pointer;
+    margin-right: 8px;
+    font-size: 14px;
+}
+
+.mypage-modify-button:hover, .mypage-delete-button:hover {
+    background-color: #e0e0e0;
+}
+
+.review-actions {
+    margin-top: 10px;
+}
+
+.mypage-review-card {
+    padding: 20px;
+    border: 1px solid #ddd;
+    margin-bottom: 15px;
+    background-color: #fafafa;
+}
+
+
 /* 영화 카드 스타일 */
 .mymovie-movie-card {
     display: inline-block;
