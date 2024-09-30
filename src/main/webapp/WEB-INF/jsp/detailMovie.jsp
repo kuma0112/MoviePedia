@@ -124,7 +124,12 @@
         const movieId = ${movie.movieId}; // movieId 변수 추가
 
         // 리뷰 가져오는 함수
-        async function fetchReviews() {
+        async function fetchReviews(reset = false) {
+            if (reset) {
+                currentPage = 0;
+                reviewContainer.innerHTML = '';
+            }
+
             currentPage++;
             const response = await fetch(`/api/movies/${movieId}/reviews?page=${currentPage}&size=${reviewsPerPage}`);
             const reviewsData = await response.json();
@@ -148,6 +153,8 @@
             // 리뷰가 모두 로드되었으면 더보기 버튼 숨기기
             if ((currentPage * reviewsPerPage) >= reviewsData.totalElements) {
                 loadMoreBtn.style.display = "none";
+            } else {
+                loadMoreBtn.style.display = "block";
             }
         }
 
