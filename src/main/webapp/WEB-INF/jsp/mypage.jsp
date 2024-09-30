@@ -98,6 +98,10 @@
                 <h4>영화 제목: \${review.movieTitle}</h4>
                 <p>리뷰 내용: \${review.content}</p>
                 <span class="review-author">작성자: \${review.nickname}</span>
+                <div class="review-actions">
+                    <button class="mypage-modify-button" data-review-id="\${review.reviewId}" data-movie-id="\${review.movieId}">수정</button>
+                    <button class="mypage-delete-button" data-review-id="\${review.reviewId}" data-movie-id="\${review.movieId}">삭제</button>
+                </div>
             `;
             reviewContainer.appendChild(reviewCard);
         });
