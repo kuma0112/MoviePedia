@@ -3,13 +3,13 @@ package com.supershy.moviepedia.movie.entity;
 import com.supershy.moviepedia.genre.entity.Genre;
 import com.supershy.moviepedia.review.entity.Review;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.BatchSize;
+
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.List;
-
-import lombok.Builder;
 
 
 @Entity
@@ -36,7 +36,8 @@ public class Movie {
     @Column(columnDefinition = "ENUM('NOW_SHOWING', 'UPCOMING')")
     private ReleaseState releaseState;
 
-    @OneToMany(mappedBy = "movie", fetch = FetchType.LAZY)  // Review와의 관계 설정
+    @OneToMany(mappedBy = "movie", fetch = FetchType.LAZY)
+    @BatchSize(size = 10)
     private List<Review> reviews;
 
     @Builder
